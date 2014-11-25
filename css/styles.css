@@ -28,16 +28,40 @@ select {
 html, body {
     height: 100% !important;
 }
-#container > header {
+#main {
+    margin: 80px 0 0 0;
+    display: block;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+}
+#main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 80px;
     background: #111111;
     color: #ffffff;
+    -webkit-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    -ms-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    transition: all 0.4s ease;
 }
-#container > header > div {
+.fixed-header {
+    height: 50px !important;
+    z-index: 20;
+}
+#main-header > div {
     height: 80px;
 }
-#container > header > div, #breadcrumbs > div {
+.fixed-header > div {
+    height: 50px !important;
+}
+#main-header > div, #breadcrumbs > div {
     margin: 0 auto;
     width: 960px;
 }
@@ -49,12 +73,25 @@ html, body {
     -ms-transition: all 0.3s;
     -o-transition: all 0.3s;
     transition: all 0.3s;
+    display: block;
+}
+.main-collapse {
+    display: none !important;
 }
 #logo-container {
     width: 140px;
     height: 60px;
     padding: 20px 0 0 0;
     float: left;
+    -webkit-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    -ms-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+.fixed-header #logo-container {
+    height: 50px !important;
+    padding: 8px 0 0 0;
 }
 #search {
     float: right;
@@ -76,6 +113,9 @@ html, body {
     -ms-transition: all 0.3s ease-out;
     -o-transition: all 0.3s ease-out;
     transition: all 0.3s ease-out;
+}
+.fixed-header #search > input[type="text"]{
+    margin: 9px 0 0 0 !important;
 }
 #search > input[type="text"]:focus {
     background: #ffffff;
@@ -146,16 +186,19 @@ html, body {
 #breadcrumbs > div > form > select > option {
     height: 30px;
 }
-#breadcrumbs > div > form > input[type="submit"] {
+#add-album-button {
     width: 90px;
     height: 30px;
     font-size: 1.4em;
     font-weight: 300;
     border: 1px solid #ccc;
     border-radius: 3px;
-    margin: 25px 0 0 0;
+    margin: 25px 2px 0 0;
     background: #ffffff;
     color: #777;
+    float: right;
+    line-height: 30px;
+    text-align: center;
 }
 #container > footer {
     width: 100%;
@@ -387,6 +430,30 @@ html, body {
     border-radius: 3px;
     overflow: hidden;
     display: block;
+    position: relative;
+}
+#album-images-container > li > section:hover {
+    cursor: pointer;
+}
+.pic-hover{
+    width: 0;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #000000;
+    opacity: 0.1;
+    -webkit-transition: width 0.2s ease, opacity 0.4s ease;
+    -moz-transition: width 0.2s ease, opacity 0.4s ease;
+    -ms-transition: width 0.2s ease, opacity 0.4s ease;
+    -o-transition: width 0.2s ease, opacity 0.4s ease;
+    transition: width 0.2s ease, opacity 0.4s ease;
+    display: block;
+    border-radius: 5px;
+}
+#album-images-container > li > section:hover > .pic-hover{
+    width: 100%;
+    opacity: 0.7;
 }
 #album-images-container > li > section > img {
     width: 100%;
@@ -407,10 +474,219 @@ html, body {
     float: right;
 }
 
+.pic-download {
+    width: 108px;
+    height: 40px;
+    float: right;
+    text-align: right;
+    background: url("../images/download-icon.png") -2px 11px no-repeat;
+    margin: 0 0 0 18px;
+    text-transform: uppercase;
+    font-weight: 600;
+    -webkit-transition: opacity 0.2s;
+    -moz-transition: opacity 0.2s;
+    -ms-transition: opacity 0.2s;
+    -o-transition: opacity 0.2s;
+    transition: opacity 0.2s;
+    color: #000000;
+    opacity: 0.9;
+}
+.pic-download:hover {
+    cursor: pointer;
+    opacity: 0.7;
+}
 
+/*---------*/
+/*POPUPS*/
+/*---------*/
 
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 20;
+    overflow: hidden;
+}
+#popup-picture, #popup-add-album {
+    display: none;
+}
+.bodysize-close-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -10;
+}
+.bodysize-close-popup:hover {
+    cursor: pointer;
+}
+#popup-picture-container{
+    background: #ffffff;
+    z-index: 10;
+    margin: 50px 0 0 100px;
+    overflow: hidden;
+    position: relative;
+}
+#popup-picture-image-container {
+    z-index: 15;
+    overflow: hidden;
+    text-align: center;
+    background: #ffffff;
+}
+#pic-shown {
+    z-index: 20;
+}
+#popup-picture-comment-container {
+    z-index: 50;
+    width: 380px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #ffffff;
+    padding: 16px;
+}
+#pic-all-comments {
+    display: block;
+    overflow-y: scroll;
+}
+#popup-picture-comment-container ul {
+    list-style: none;
+}
+#popup-picture-comment-container ul li {
+    margin: 0 0 15px 0;
+}
+#popup-picture-comment-container li > header {
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+    margin: 0 0 8px 0;
+}
+#popup-picture-comment-container li > header > span:nth-child(1) {
+    float: left;
+    font-size: 1.8em;
+    color: #222222;
+}
+#popup-picture-comment-container li > header > span:nth-child(2) {
+    float: right;
+    font-size: 1.3em;
+}
+#popup-picture-comment-container li > article {
+    font-size: 1.4em;
+    color: #777;
+    padding: 0 5px;
+}
+#add-comment {
+    height: 230px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 0 16px 16px 16px;
+}
+.small-title {
+    font-size: 1.8em;
+    margin: 0 0 10px 0;
+    display: block;
+}
+#add-comment form > label {
+    font-size: 1.5em;
+    width: 80px;
+    color: #555555;
+}
+#add-comment form > input[type="text"] {
+    width: 200px;
+    height: 26px;
+    padding: 1px 0 0 6px;
+    font-size: 1.4em;
+    border: 1px solid #cccccc;
+}
+#add-comment form > textarea {
+    padding: 6px;
+    width: 100%;
+    height: 100px;
+    font-size: 1.4em;
+    border: 1px solid #cccccc;
+    margin: 10px 0 0 0;
+    outline: none;
+}
+#add-comment form > input[type="button"] {
+    width: 150px;
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    margin: 0 0 0 -75px;
+    height: 40px;
+    background: #ffffff;
+    color: #333;
+    border: none;
+    font-size: 1.5em;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-align: center;
+    -webkit-transition: opacity 0.2s ease;
+    -moz-transition: opacity 0.2s ease;
+    -ms-transition: opacity 0.2s ease;
+    -o-transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease;
+}
+#add-comment form > input[type="button"]:hover {
+    opacity: 0.6;
+}
 
-
+.standard-popup {
+    background: #ffffff;
+    z-index: 10;
+    overflow: hidden;
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    margin: 0 0 0 -300px;
+    width: 600px;
+    height: auto;
+    padding: 40px 20px;
+}
+.standard-title {
+    font-size: 2.4em;
+    font-weight: 300;
+    margin: 0 0 40px 0;
+}
+#popup-add-album label {
+    display: inline-block;
+    width: 90px;
+    font-size: 1.5em;
+    font-weight: 400;
+}
+#popup-add-album input[type="text"], #popup-add-album select {
+    width: 300px;
+    height: 32px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin: 0 0 10px 0;
+    font-size: 1.4em;
+    padding: 0 0 0 10px;
+}
+#add-album-submit {
+    width: 140px;
+    height: 32px;
+    font-size: 1.4em;
+    border: none;
+    background: #222222;
+    color: #ffffff;
+    margin: 20px 0 0 0;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -ms-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
+}
+#add-album-submit:hover {
+    opacity: 0.7;
+}
 
 
 

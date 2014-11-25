@@ -10,26 +10,82 @@
 	<link rel="stylesheet" href="css/styles.css">
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.3.1.min.js"></script>
+    <script type="text/javascript" src="jquery/jquery-1.11.1.min.js"></script>
     <script type="text/javascript">
         function openAlbum() {
             document.getElementById("back-button").classList.toggle("back-button-change");
             document.getElementById("back-button").style.display = "block";
-            document.getElementById("main-container").style.display = "none";
+            document.getElementById("main-container").classList.add("main-collapse");
             document.getElementById("album-opened-container").style.display = "block";
         }
         function collapseAlbum() {
             document.getElementById("back-button").classList.toggle("back-button-change");
             document.getElementById("back-button").style.display = "none";
-            document.getElementById("main-container").style.display = "block";
+            document.getElementById("main-container").classList.remove("main-collapse");
             document.getElementById("album-opened-container").style.display = "none";
 
         }
+        function loadPopup() {
+            document.getElementById("popup-picture").style.display = "block";
+            setSize();
+        }
+        function closePopup() {
+            document.getElementById("popup-picture").style.display = "none";
+            document.getElementById("popup-add-album").style.display = "none";
+        }
+        function setSize() {
+            var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+
+            var img = document.getElementById("pic-shown");
+            var pictureWidth = (img.clientWidth);
+            var pictureHeight = (img.clientHeight);
+
+            var widthContainer = viewportWidth - 200;
+            var heightContainer = viewportHeight -100;
+            document.getElementById("popup-picture-container").style.width = widthContainer.toString()+'px';
+            document.getElementById("popup-picture-container").style.height = heightContainer.toString()+'px';
+
+            var aspectRatio = (pictureWidth)/(pictureHeight);
+
+            console.log(widthContainer + " " + heightContainer + " " + pictureWidth + " " + pictureHeight);
+            document.getElementById("popup-picture-image-container").style.width = (widthContainer-380).toString()+'px';
+            document.getElementById("popup-picture-image-container").style.height = heightContainer.toString()+'px';
+            if ((widthContainer-380)/heightContainer > aspectRatio) {
+                document.getElementById("pic-shown").style.maxHeight = '100%';
+            }
+            else {
+                document.getElementById("pic-shown").style.maxWidth = '100%';
+            }
+            if (aspectRatio >= 1) {
+                var paddingTop = Math.abs((heightContainer-((widthContainer-380)/aspectRatio))/2).toString()+'px';
+                console.log(paddingTop);
+                document.getElementById("popup-picture-image-container").style.paddingTop = paddingTop;
+            }
+            document.getElementById("pic-all-comments").style.height = (heightContainer - 260).toString() + 'px';
+        }
+        function loadAddAlbum() {
+            document.getElementById("popup-add-album").style.display = "block";
+        }
+        $(document).ready(function() {
+            $(window).scroll(function (event) {
+                var scroll = $(window).scrollTop();
+                if (scroll > 0) {
+                    document.getElementById("main-header").classList.add("fixed-header");
+                    document.getElementById("main").style.marginTop = "50px";
+                }
+                if (scroll == 0) {
+                    document.getElementById("main-header").classList.remove("fixed-header");
+                    document.getElementById("main").style.marginTop = "80px";
+                }
+            });
+        })
     </script>
 </head>
 
 <body>
 <div id="container">
-    <header>
+    <header id="main-header">
         <div>
             <div id="logo-container">
                 <img src="images/logo.png">
@@ -49,6 +105,7 @@
                         <li>Category name</li>
                     </ul>
                 </section>
+                <div id="add-album-button" onclick="loadAddAlbum()">Add album</div>
                 <form>
                     <select>
                         <option>Category 1</option>
@@ -61,11 +118,15 @@
                         <option>Date (ascending)</option>
                         <option>Date (descending)</option>
                     </select>
-                    <input type="submit" value="Add album">
                 </form>
             </div>
         </section>
         <div id="main-container" class="cf">
+
+            <!----------------------------------->
+            <!------- ALL ALBUMS ARE HERE ------->
+            <!----------------------------------->
+
             <ul id="album-list">
                 <li class="album" onclick="openAlbum()">
                     <h3 class="album-title">Album name example</h3>
@@ -75,6 +136,73 @@
                             <li><img src="images/pic2.jpg"></li>
                             <li><img src="images/pic3.jpg"></li>
                             <li><img src="images/pic4.jpg"></li>
+
+                        </ul>
+                        <div class="white-overlay"></div>
+                        <div class="hover-black"></div>
+                        <div class="icon-album-hover"></div>
+                    </div>
+                    <footer>
+                        <section class="alb-comments-f">
+                            45 com
+                        </section>
+                        <section class="alb-rating-f">
+                            5.7 / 10
+                        </section>
+                    </footer>
+                </li>
+                <li class="album" onclick="openAlbum()">
+                    <h3 class="album-title">Album name example</h3>
+                    <div class="album-pic-holder">
+                        <ul>
+                            <li><img src="images/pic5.jpg"></li>
+                            <li><img src="images/pic6.jpg"></li>
+                            <li><img src="images/pic7.jpg"></li>
+                            <li><img src="images/pic8.jpg"></li>
+                        </ul>
+                        <div class="white-overlay"></div>
+                        <div class="hover-black"></div>
+                        <div class="icon-album-hover"></div>
+                    </div>
+                    <footer>
+                        <section class="alb-comments-f">
+                            45 com
+                        </section>
+                        <section class="alb-rating-f">
+                            5.7 / 10
+                        </section>
+                    </footer>
+                </li>
+                <li class="album" onclick="openAlbum()">
+                    <h3 class="album-title">Album name example</h3>
+                    <div class="album-pic-holder">
+                        <ul>
+                            <li><img src="images/pic9.png"></li>
+                            <li><img src="images/pic10.jpg"></li>
+                            <li><img src="images/pic11.jpg"></li>
+                            <li><img src="images/pic1.jpg"></li>
+                        </ul>
+                        <div class="white-overlay"></div>
+                        <div class="hover-black"></div>
+                        <div class="icon-album-hover"></div>
+                    </div>
+                    <footer>
+                        <section class="alb-comments-f">
+                            45 com
+                        </section>
+                        <section class="alb-rating-f">
+                            5.7 / 10
+                        </section>
+                    </footer>
+                </li>
+                <li class="album" onclick="openAlbum()">
+                    <h3 class="album-title">Album name example</h3>
+                    <div class="album-pic-holder">
+                        <ul>
+                            <li><img src="images/pic7.jpg"></li>
+                            <li><img src="images/pic10.jpg"></li>
+                            <li><img src="images/pic11.jpg"></li>
+                            <li><img src="images/pic5.jpg"></li>
                         </ul>
                         <div class="white-overlay"></div>
                         <div class="hover-black"></div>
@@ -96,6 +224,7 @@
         <div id="album-opened-container">
             <div id="back-button" onclick="collapseAlbum()"></div>
             <h2 id="opened-album-title">Opened Album Name </h2>
+
             <ul id="album-images-container">
                 <li>
                     <header>
@@ -103,9 +232,25 @@
                     </header>
                     <section>
                         <img src="images/pic1.jpg">
+                        <div class="pic-hover" onclick="loadPopup()"></div>
                     </section>
                     <footer>
                         <section class="pic-date">Date: 25.11.2014</section>
+                        <section class="pic-download">Download</section>
+                        <section class="pic-rating">Rating: 6.6 / 10</section>
+                    </footer>
+                </li>
+                <li>
+                    <header>
+                        <h3>Picture title is here</h3>
+                    </header>
+                    <section>
+                        <img src="images/pic6.jpg">
+                        <div class="pic-hover" onclick="loadPopup()"></div>
+                    </section>
+                    <footer>
+                        <section class="pic-date">Date: 25.11.2014</section>
+                        <section class="pic-download">Download</section>
                         <section class="pic-rating">Rating: 6.6 / 10</section>
                     </footer>
                 </li>
@@ -115,9 +260,11 @@
                     </header>
                     <section>
                         <img src="images/pic2.jpg">
+                        <div class="pic-hover" onclick="loadPopup()"></div>
                     </section>
                     <footer>
                         <section class="pic-date">Date: 25.11.2014</section>
+                        <section class="pic-download">Download</section>
                         <section class="pic-rating">Rating: 6.6 / 10</section>
                     </footer>
                 </li>
@@ -127,13 +274,102 @@
                     </header>
                     <section>
                         <img src="images/pic3.jpg">
+                        <div class="pic-hover" onclick="loadPopup()"></div>
                     </section>
                     <footer>
                         <section class="pic-date">Date: 25.11.2014</section>
+                        <section class="pic-download">Download</section>
                         <section class="pic-rating">Rating: 6.6 / 10</section>
                     </footer>
                 </li>
+
             </ul>
+        </div>
+    </div>
+    <div id="popup-picture" class="popup">
+        <div class="bodysize-close-popup" onclick="closePopup()"></div>
+        <div id="popup-picture-container">
+            <section id="popup-picture-image-container">
+                <img src="images/test1.jpg" id="pic-shown">
+            </section>
+            <section id="popup-picture-comment-container">
+                <section id="pic-all-comments">
+                    <ul>
+                        <li>
+                            <header>
+                                <span>Damian Dobrev:</span>
+                                <span>25.11.2014</span>
+                            </header>
+                            <article>
+                                The comment itself! The comment itself! The comment itself! The comment itself! The comment itself!
+                            </article>
+                        </li>
+                        <li>
+                            <header>
+                                <span>Someone Else:</span>
+                                <span>25.11.2014</span>
+                            </header>
+                            <article>
+                                The comment itself!
+                            </article>
+                        </li>
+                        <li>
+                            <header>
+                                <span>Santa Claus:</span>
+                                <span>25.11.2014</span>
+                            </header>
+                            <article>
+                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                            </article>
+                        </li>
+                        <li>
+                            <header>
+                                <span>Santa Claus:</span>
+                                <span>25.11.2014</span>
+                            </header>
+                            <article>
+                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                            </article>
+                        </li>
+                        <li>
+                            <header>
+                                <span>Santa Claus:</span>
+                                <span>25.11.2014</span>
+                            </header>
+                            <article>
+                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                            </article>
+                        </li>
+                    </ul>
+                </section>
+                <section id="add-comment">
+                    <span class="small-title">Add a comment</span>
+                    <form>
+                        <label for="name-for-pic-comment">Name: </label><input type="text" id="name-for-pic-comment">
+                        <textarea></textarea>
+                        <input type="button" value="Add comment!">
+                    </form>
+                </section>
+            </section>
+        </div>
+
+    </div>
+    <div id="popup-add-album" class="popup">
+        <div class="bodysize-close-popup" onclick="closePopup()"></div>
+        <div class="standard-popup">
+            <h2 class="standard-title">Add album</h2>
+            <form>
+                <label for="album-name">NAME: </label><input type="text" id="album-name">
+                <br>
+                <label for="album-category">CATEGORY: </label>
+                <select id="album-category">
+                    <option>Category1</option>
+                    <option>Category2</option>
+                    <option>Category3</option>
+                </select>
+                <br>
+                <input type="submit" value="Add album" id="add-album-submit">
+            </form>
         </div>
     </div>
     <footer>
@@ -143,7 +379,6 @@
 
 	<script type="text/javascript">
 		Parse.initialize("6bjvgCqdQXoWQGLre6KwR7mmxkCBjF03ClAXLQ6l", "RdajQSeLGu5UDhj8142Kp6xkHIJIatuWuwUifZmW");
-
 	</script>
 </body>
 </html>
