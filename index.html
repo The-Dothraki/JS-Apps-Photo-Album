@@ -17,12 +17,18 @@
             document.getElementById("back-button").style.display = "block";
             document.getElementById("main-container").classList.add("main-collapse");
             document.getElementById("album-opened-container").style.display = "block";
+            document.getElementById("add-album-button").style.display = "none";
+            document.getElementById("add-picture-button").style.display = "block";
+            document.getElementById("rate-album").style.display = "block";
         }
         function collapseAlbum() {
             document.getElementById("back-button").classList.toggle("back-button-change");
             document.getElementById("back-button").style.display = "none";
             document.getElementById("main-container").classList.remove("main-collapse");
             document.getElementById("album-opened-container").style.display = "none";
+            document.getElementById("add-album-button").style.display = "block";
+            document.getElementById("add-picture-button").style.display = "none";
+            document.getElementById("rate-album").style.display = "none";
 
         }
         function loadPopup() {
@@ -32,6 +38,7 @@
         function closePopup() {
             document.getElementById("popup-picture").style.display = "none";
             document.getElementById("popup-add-album").style.display = "none";
+            document.getElementById("popup-add-picture").style.display = "none";
         }
         function setSize() {
             var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -67,6 +74,12 @@
         function loadAddAlbum() {
             document.getElementById("popup-add-album").style.display = "block";
         }
+        function loadAddPicture() {
+            document.getElementById("popup-add-picture").style.display = "block";
+        }
+        function rateAlbum() {
+
+        }
         $(document).ready(function() {
             $(window).scroll(function (event) {
                 var scroll = $(window).scrollTop();
@@ -101,11 +114,8 @@
         <section id="breadcrumbs">
             <div>
                 <section id="bc">
-                    <ul>
-                        <li>Category name</li>
-                    </ul>
+                    <span>Filters: </span>
                 </section>
-                <div id="add-album-button" onclick="loadAddAlbum()">Add album</div>
                 <form>
                     <select>
                         <option>Category 1</option>
@@ -119,6 +129,9 @@
                         <option>Date (descending)</option>
                     </select>
                 </form>
+                <div id="add-album-button" onclick="loadAddAlbum()">Add album</div>
+                <div id="add-picture-button" onclick="loadAddPicture()">Add picture</div>
+                <div id="rate-album" onclick="loadRateAlbum()">Rate album</div>
             </div>
         </section>
         <div id="main-container" class="cf">
@@ -369,6 +382,20 @@
                 </select>
                 <br>
                 <input type="submit" value="Add album" id="add-album-submit">
+            </form>
+        </div>
+    </div>
+    <div id="popup-add-picture" class="popup">
+        <div class="bodysize-close-popup" onclick="closePopup()"></div>
+        <div class="standard-popup">
+            <h2 class="standard-title">Add picture</h2>
+            <form>
+                <label for="picture-name">NAME: </label><input type="text" id="picture-name">
+                <br>
+                <label for="image-file">CHOOSE A FILE: </label>
+                <input type="file" id="image-file">
+                <br>
+                <input type="submit" value="Add picture" id="add-picture-submit">
             </form>
         </div>
     </div>
