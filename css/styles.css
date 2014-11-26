@@ -708,7 +708,13 @@ input[type="text"], #popup-add-album select {
     opacity: 0.7;
     cursor: pointer;
 }
-
-
-
-
+#add-comment-button {
+    margin-top: 0;
+}
+#comment-value {
+    margin: 0 !important;
+}
+#album-name {
+    margin-left: 2px;
+    padding-left: 15px;
+}
