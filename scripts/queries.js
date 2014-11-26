@@ -32,6 +32,22 @@ var Queries = (function() {
 
         return query.find();
     }
+    (function () {
+        Category = Parse.Object.extend("Category");
+        var query = new Parse.Query(Category);
+        query.find({
+            success: function (results) {
+                console.log(results);
+                results.forEach(function (i) {
+                    $(".categories-in-dropdown")
+                        .append($('<option></option>')
+                        .val(i.id)
+                        .html(i.attributes.name));
+                })
+            }
+        });
+
+    })();
 
     return {
         getObjectById: getObjectById,

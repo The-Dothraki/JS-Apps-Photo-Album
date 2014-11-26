@@ -687,13 +687,16 @@ input[type="text"], #popup-add-album select {
     font-size: 1.4em;
     padding: 0 0 0 10px;
 }
-#add-album-submit, #add-picture-submit {
-    padding: 0 20px;
+.add-buttons {
+    width: 120px;
+    text-align: center;
     height: 32px;
+    line-height: 32px;
     font-size: 1.4em;
     border: none;
     background: #222222;
     color: #ffffff;
+    border-radius: 3px;
     margin: 20px 0 0 0;
     -webkit-transition: all 0.2s;
     -moz-transition: all 0.2s;
@@ -701,8 +704,9 @@ input[type="text"], #popup-add-album select {
     -o-transition: all 0.2s;
     transition: all 0.2s;
 }
-#add-album-submit:hover {
+#add-album-submit:hover, #add-picture-submit:hover {
     opacity: 0.7;
+    cursor: pointer;
 }
 
 
