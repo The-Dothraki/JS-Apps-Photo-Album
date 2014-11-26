@@ -6,94 +6,9 @@
 	<meta name="description" content="Photo Album">
 	<meta name="viewport" content="width=device-width">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,300' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="css/reset.css">
 	<link rel="stylesheet" href="css/styles.css">
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.3.1.min.js"></script>
     <script type="text/javascript" src="jquery/jquery-1.11.1.min.js"></script>
-    <script type="text/javascript">
-        function openAlbum() {
-            document.getElementById("back-button").classList.toggle("back-button-change");
-            document.getElementById("back-button").style.display = "block";
-            document.getElementById("main-container").classList.add("main-collapse");
-            document.getElementById("album-opened-container").style.display = "block";
-            document.getElementById("add-album-button").style.display = "none";
-            document.getElementById("add-picture-button").style.display = "block";
-            document.getElementById("rate-album").style.display = "block";
-        }
-        function collapseAlbum() {
-            document.getElementById("back-button").classList.toggle("back-button-change");
-            document.getElementById("back-button").style.display = "none";
-            document.getElementById("main-container").classList.remove("main-collapse");
-            document.getElementById("album-opened-container").style.display = "none";
-            document.getElementById("add-album-button").style.display = "block";
-            document.getElementById("add-picture-button").style.display = "none";
-            document.getElementById("rate-album").style.display = "none";
-
-        }
-        function loadPopup() {
-            document.getElementById("popup-picture").style.display = "block";
-            setSize();
-        }
-        function closePopup() {
-            document.getElementById("popup-picture").style.display = "none";
-            document.getElementById("popup-add-album").style.display = "none";
-            document.getElementById("popup-add-picture").style.display = "none";
-        }
-        function setSize() {
-            var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-            var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-
-            var img = document.getElementById("pic-shown");
-            var pictureWidth = (img.clientWidth);
-            var pictureHeight = (img.clientHeight);
-
-            var widthContainer = viewportWidth - 200;
-            var heightContainer = viewportHeight -100;
-            document.getElementById("popup-picture-container").style.width = widthContainer.toString()+'px';
-            document.getElementById("popup-picture-container").style.height = heightContainer.toString()+'px';
-
-            var aspectRatio = (pictureWidth)/(pictureHeight);
-
-            console.log(widthContainer + " " + heightContainer + " " + pictureWidth + " " + pictureHeight);
-            document.getElementById("popup-picture-image-container").style.width = (widthContainer-380).toString()+'px';
-            document.getElementById("popup-picture-image-container").style.height = heightContainer.toString()+'px';
-            if ((widthContainer-380)/heightContainer > aspectRatio) {
-                document.getElementById("pic-shown").style.maxHeight = '100%';
-            }
-            else {
-                document.getElementById("pic-shown").style.maxWidth = '100%';
-            }
-            if (aspectRatio >= 1) {
-                var paddingTop = Math.abs((heightContainer-((widthContainer-380)/aspectRatio))/2).toString()+'px';
-                console.log(paddingTop);
-                document.getElementById("popup-picture-image-container").style.paddingTop = paddingTop;
-            }
-            document.getElementById("pic-all-comments").style.height = (heightContainer - 260).toString() + 'px';
-        }
-        function loadAddAlbum() {
-            document.getElementById("popup-add-album").style.display = "block";
-        }
-        function loadAddPicture() {
-            document.getElementById("popup-add-picture").style.display = "block";
-        }
-        function rateAlbum() {
-
-        }
-        $(document).ready(function() {
-            $(window).scroll(function (event) {
-                var scroll = $(window).scrollTop();
-                if (scroll > 0) {
-                    document.getElementById("main-header").classList.add("fixed-header");
-                    document.getElementById("main").style.marginTop = "50px";
-                }
-                if (scroll == 0) {
-                    document.getElementById("main-header").classList.remove("fixed-header");
-                    document.getElementById("main").style.marginTop = "80px";
-                }
-            });
-        })
-    </script>
 </head>
 
 <body>
@@ -117,21 +32,17 @@
                     <span>Filters: </span>
                 </section>
                 <form>
-                    <select>
-                        <option>Category 1</option>
-                        <option>Category 2</option>
-                        <option>Category 3</option>
-                    </select>
-                    <select>
+                    <select id="filters-category" class="categories-in-dropdown"></select>
+                    <select id="filters-rating">
                         <option>Rating (ascending)</option>
                         <option>Rating (descending)</option>
                         <option>Date (ascending)</option>
                         <option>Date (descending)</option>
                     </select>
                 </form>
-                <div id="add-album-button" onclick="loadAddAlbum()">Add album</div>
-                <div id="add-picture-button" onclick="loadAddPicture()">Add picture</div>
-                <div id="rate-album" onclick="loadRateAlbum()">Rate album</div>
+                <div id="add-album-button" onclick="loadAddAlbum()" class="add-buttons">Add album</div>
+                <div id="add-picture-button" onclick="loadAddPicture()" class="add-buttons">Add picture</div>
+                <div id="rate-album"  class="add-buttons">Rate album</div>
             </div>
         </section>
         <div id="main-container" class="cf">
@@ -375,14 +286,12 @@
                 <label for="album-name">NAME: </label><input type="text" id="album-name">
                 <br>
                 <label for="album-category">CATEGORY: </label>
-                <select id="album-category">
-                    <option>Category1</option>
-                    <option>Category2</option>
-                    <option>Category3</option>
-                </select>
+                <select id="album-category" class="categories-in-dropdown"></select>
                 <br>
-                <input type="submit" value="Add album" id="add-album-submit">
             </form>
+
+            <div id="add-album-submit">Add album</div>
+
         </div>
     </div>
     <div id="popup-add-picture" class="popup">
@@ -395,7 +304,7 @@
                 <label for="image-file">CHOOSE A FILE: </label>
                 <input type="file" id="image-file">
                 <br>
-                <input type="submit" value="Add picture" id="add-picture-submit">
+                <div id="add-picture-submit" class="add-buttons">Add picture</div>
             </form>
         </div>
     </div>
