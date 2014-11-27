@@ -3,10 +3,22 @@ var Actions = (function() {
         Category = Parse.Object.extend("Category"),
         Album = Parse.Object.extend("Album");
 
-    function addPictureToAlbum(name, file, album) {
-        var pic;
+    function uploadPicture (name) {
+        var fileUploadControl = document.getElementById("image-file");
 
-        pic = new Picture();
+        if (fileUploadControl.files.length > 0) {
+          var file = fileUploadControl.files[0];         
+          var parseFile = new Parse.File(name, file);
+
+          return parseFile;
+        } else {
+            throw new Error('Couldn\'t upload the picture!');
+        }
+    }
+
+    function addPictureToAlbum(name, file, album) {
+        var pic = new Picture();
+
         pic.set("name", name);
         pic.set("file", file);
         pic.set("album", album);
@@ -50,6 +62,7 @@ var Actions = (function() {
     }
 
     return {
+        uploadPicture: uploadPicture,
         addPictureToAlbum: addPictureToAlbum,
         createAlbum: createAlbum,
         createCategory: createCategory,
