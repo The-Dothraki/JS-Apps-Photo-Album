@@ -159,5 +159,10 @@ $(document).ready(function() {
     });
 })
 
+$(function () {
+    Dom.listAlbums();
+
+});
+
 document.getElementById("add-album-submit").addEventListener("click", createAlbum);
 document.getElementById("add-picture-submit").addEventListener("click", addPictureToAlbum);

@@ -1,4 +1,4 @@
-var Queries = (function() {
+var Queries = (function () {
     var Object,
         query,
         resultsQuery;
@@ -32,6 +32,48 @@ var Queries = (function() {
 
         return query.find();
     }
+
+    /* object, pointedObject are names of tables,
+      example : object is album and pointer is picture
+      return JSON
+    */
+    function getObjectAndPointer(object, pointer, callback) {
+        var arr = [];
+        var unique = [];
+
+        object = object.toLowerCase();
+
+        var parseObj = Parse.Object.extend(pointer);
+        pointer = pointer.toLowerCase();
+
+        new Parse.Query(parseObj)
+          .include(object)
+          .find({
+              success: function (data) {
+                  for (var i = 0; i < data.length; i++) {
+
+                      var obj = data[i].get(object).toJSON();
+                      var point = data[i].toJSON();
+
+                      if (unique.indexOf(obj.objectId) === -1) {
+                          obj[pointer] = [];
+                          obj[pointer].push(point);
+                          arr.push(obj);
+                          unique.push(obj.objectId);
+                      } else {
+                          var result = arr.filter(function (x) {
+                              return x.objectId == point[object].objectId;
+                          });
+                          result[0][pointer].push(point);
+                      }
+                  }
+                  callback(arr);
+              },
+
+              error: console.log("Queries.getObjectAndPointer has error")
+          });
+    }
+
     (function () {
         Category = Parse.Object.extend("Category");
         var query = new Parse.Query(Category);
@@ -52,6 +94,7 @@ var Queries = (function() {
     return {
         getObjectById: getObjectById,
         getObjectsByName: getObjectsByName,
-        getPicturesByAlbum: getPicturesByAlbum
+        getPicturesByAlbum: getPicturesByAlbum,
+        getObjectAndPointer: getObjectAndPointer
     }
 }());
