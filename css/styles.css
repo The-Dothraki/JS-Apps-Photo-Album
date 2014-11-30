@@ -425,6 +425,7 @@ html, body {
     height: 250px;
     float: left;
     width: 55%;
+    padding-right: 5px;
 }
 
 #add-album-comment {
@@ -513,6 +514,7 @@ textarea#textareaAlbumComment:focus {
 
 article#album-comment-article {
     font-size: 1.4em;
+    text-align: justify;
 }
 
 

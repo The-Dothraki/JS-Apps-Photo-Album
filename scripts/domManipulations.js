@@ -116,10 +116,14 @@
 
             var ulComments = $('<ul>');
 
+            var divOnClick = $('<div>');
+            divOnClick.attr('id', 'add-comment-button').attr('class', 'add-buttons').text('Add comment');
+            divOnClick.on("click", addCommentToAlbum);
+
             var commentsForm = $('<form>');
             commentsForm.append($('<input>').attr('type', 'text').attr('id', 'name-for-album-comment').attr('placeholder', 'Enter your name'))
                 .append($('<br>')).append($('<textarea>').attr('id', 'textareaAlbumComment').attr('placeholder', 'Enter a comment'))
-                .append($('<div>').attr('id', 'add-comment-button').attr('class', 'add-buttons').text('Add comment'));
+                .append(divOnClick);
 
             var sectionAddAlbumComment = $('<section>');
             sectionAddAlbumComment.attr('id', 'add-album-comment')
@@ -160,8 +164,6 @@
                 return obj.getDate() + '.' + months[obj.getMonth()] +
                     '.' + obj.getFullYear();
             }
-
-
 
             albumContainer.append(h2).append(sectionCommentsContainer).append(clearDiv).append(ul);
         });
