@@ -2,7 +2,7 @@
     var mainContainer = $("#album-list");
 
     function listAllAlbums() {
-        Queries.getObjectAndPointer("Album", "Picture", function (result) {            
+        Queries.getObjectAndPointer("Album", "Picture", function (result) {
 
             result.forEach(function (pic, i) {
                 var album = result[i];
@@ -13,7 +13,7 @@
                 var ul = $('<ul>');
                 var displayedPictureCount = 0;
 
-                li.attr('class', 'album ' + pic.objectId).attr('onclick', 'openAlbum()');
+                li.attr('id', pic.objectId).attr('title', pic.name).attr('class', 'album').attr('onclick', 'openAlbum()');
 
                 //h3
                 h.attr('class', 'album-title').text(album.name);
@@ -23,7 +23,7 @@
                 pic.picture.forEach(function (x) {
                     var imgLi = $('<li>').append($('<img>').attr('src', x.file.url));
 
-                    //hide picture if album has more than 
+                    //hide picture if album has more than
                     if (++displayedPictureCount > 4) {
                         imgLi.hide();
                     }
@@ -31,27 +31,93 @@
 
                 });
                 div.append($('<div>').attr('class', 'white-overlay'))
-                   .append($('<div>').attr('class', 'hover-black'))
-                   .append($('<div>').attr('class', 'icon-album-hover'));
+                    .append($('<div>').attr('class', 'hover-black'))
+                    .append($('<div>').attr('class', 'icon-album-hover'));
 
                 //footer
                 footer.append($('<section>').attr('class', 'alb-comments-f').text(album.comments.length + ' com'))
-                      .append($('<section>').attr('class', 'alb-rating-f').text(album.rating + ' / 10'));
+                    .append($('<section>').attr('class', 'alb-rating-f').text(album.rating + ' / 10'));
 
 
                 li.append(h)
-                  .append(div)
-                  .append(footer);
-                mainContainer.append(li);       
+                    .append(div)
+                    .append(footer);
+                mainContainer.append(li);
             });
         });
     }
 
+    function openAnAlbum() {
+        $(document).on('click', 'li', function () {
+            var albumContainer = $("#album-opened-container");
+            var div = $('<div>');
+            var h2 = $('<h2>');
+            var li = $('<li>');
+            var ul = $('<ul>');
+            var albumName = this.title;
 
+            div.attr('id', 'back-button').attr('onclick', 'collapseAlbum()')
+                .attr('class', 'back-button-change').attr('style', 'display: block;');
+            h2.attr('id', 'opened-album-title').text(albumName);
+            ul.attr('id', 'album-images-container');
+
+            var albumID = this.id;
+            var Album = Parse.Object.extend("Album");
+            var album = new Album();
+            album.id = albumID;
+
+            Queries.getPicturesByAlbum(album).then(function (album) {
+                for (var i = 0; i < album.length; i++) {
+                    var url = album[i].attributes.file._url;
+                    var picName = album[i].attributes.name;
+                    var picDate = "Date: " + formatDate(album[i].createdAt);
+                    var picRating = "Rating: " + album[i]._serverData.rating + " / 10";
+
+
+                    var header = $('<header>');
+                    var h3 = $('<h3>');
+                    var section = $('<section>');
+                    var footer = $('<footer>');
+                    var img = $('<img>');
+                    var a = $('<a>');
+
+
+                    h3.text(picName);
+                    img.attr('src', url);
+                    a.attr('href', url).attr('download', picName).text('Download');
+
+                    header.append(h3);
+
+                    section.append(img)
+                        .append($('<div>').attr('class', 'pic-hover').attr('onclick', 'loadPopup()'));
+
+                    footer.append($('<section>').attr('class', 'pic-date').text(picDate))
+                        .append($('<section>').attr('class', 'pic-download').append(a))
+                        .append($('<section>').attr('class', 'pic-rating').text(picRating));
+
+                    ul.append(($('<li>').append(header).append(section).append(footer)));
+                };
+            });
+
+            function formatDate(obj) {
+
+                var months = ['01', '02', '03', '04', '05', '06',
+                    '07', '08', '09', '10', '11', '12'
+                ];
+
+                return obj.getDate() + '.' + months[obj.getMonth()] +
+                    '.' + obj.getFullYear();
+            }
+
+
+
+            albumContainer.append(h2).append(ul);
+        });
+    }
 
     return {
         listAlbums: listAllAlbums,
-
+        openAnAlbum: openAnAlbum,
     }
 
 })();

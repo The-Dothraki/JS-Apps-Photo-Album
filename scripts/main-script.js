@@ -7,11 +7,11 @@ function addPictureToAlbum(event) {
         var picFile = Actions.uploadPicture(validPicName);
 
         Queries.getObjectById("Album", albumId).then(function (album) {
-                Actions.addPictureToAlbum(validPicName, picFile, album);
-            }).then(function (result) {
-                closePopup();
-                alert('The picture was added to the album.');
-            });
+            Actions.addPictureToAlbum(validPicName, picFile, album);
+        }).then(function (result) {
+            closePopup();
+            alert('The picture was added to the album.');
+        });
     } catch (error) {
         alert(error.message);
     }
@@ -26,8 +26,7 @@ function createAlbum(event) {
     console.log(albumName);
     if (!albumName || albumName.length > 25 || !regexValidate.test(albumName)) {
         alert("Album name should be between 0 and 25 symbols and should contain only latin letters, numbers, intervals and dashes.");
-    }
-    else {
+    } else {
         Queries.getObjectById("Category", categoryId)
             .then(function (category) {
                 Actions.createAlbum(albumName, category);
@@ -43,7 +42,7 @@ function createCategory() {
     var catName = "Cars"; // Get from input field
 
     Actions.createCategory(catName)
-        .then(function(result) {
+        .then(function (result) {
             console.log("Category created.");
         });
 }
@@ -57,7 +56,7 @@ function getSelectedTextFromSelect(elementId) {
     return elt.options[elt.selectedIndex].text;
 }
 
-function validateString (value, varName) {
+function validateString(value, varName) {
     var trimmed = value.trim();
     var regexValidate = new RegExp("(^[A-Za-z0-9]+[A-Za-z0-9 ][A-Za-z0-9 ]*$)");
 
@@ -72,8 +71,8 @@ function validateString (value, varName) {
 function openAlbum() {
     document.getElementById("back-button").classList.toggle("back-button-change");
     document.getElementById("back-button").style.display = "block";
-    document.getElementById("main-container").classList.add("main-collapse");
     document.getElementById("album-opened-container").style.display = "block";
+    document.getElementById("main-container").classList.add("main-collapse");
     document.getElementById("add-album-button").style.display = "none";
     document.getElementById("add-picture-button").style.display = "block";
     document.getElementById("rate-album").style.display = "block";
@@ -87,6 +86,8 @@ function collapseAlbum() {
     document.getElementById("add-album-button").style.display = "block";
     document.getElementById("add-picture-button").style.display = "none";
     document.getElementById("rate-album").style.display = "none";
+    $('#album-opened-container ul').remove();
+    $('#album-opened-container h2').remove();
 }
 
 function loadPopup() {
@@ -109,23 +110,23 @@ function setSize() {
     var pictureHeight = (img.clientHeight);
 
     var widthContainer = viewportWidth - 200;
-    var heightContainer = viewportHeight -100;
-    document.getElementById("popup-picture-container").style.width = widthContainer.toString()+'px';
-    document.getElementById("popup-picture-container").style.height = heightContainer.toString()+'px';
+    var heightContainer = viewportHeight - 100;
+    document.getElementById("popup-picture-container").style.width = widthContainer.toString() + 'px';
+    document.getElementById("popup-picture-container").style.height = heightContainer.toString() + 'px';
 
-    var aspectRatio = (pictureWidth)/(pictureHeight);
+    var aspectRatio = (pictureWidth) / (pictureHeight);
 
     console.log(widthContainer + " " + heightContainer + " " + pictureWidth + " " + pictureHeight);
-    document.getElementById("popup-picture-image-container").style.width = (widthContainer-380).toString()+'px';
-    document.getElementById("popup-picture-image-container").style.height = heightContainer.toString()+'px';
-    if ((widthContainer-380)/heightContainer > aspectRatio) {
+    document.getElementById("popup-picture-image-container").style.width = (widthContainer - 380).toString() + 'px';
+    document.getElementById("popup-picture-image-container").style.height = heightContainer.toString() + 'px';
+    if ((widthContainer - 380) / heightContainer > aspectRatio) {
         document.getElementById("pic-shown").style.maxHeight = '100%';
     } else {
         document.getElementById("pic-shown").style.maxWidth = '100%';
     }
 
     if (aspectRatio >= 1) {
-        var paddingTop = Math.abs((heightContainer-((widthContainer-380)/aspectRatio))/2).toString()+'px';
+        var paddingTop = Math.abs((heightContainer - ((widthContainer - 380) / aspectRatio)) / 2).toString() + 'px';
         console.log(paddingTop);
         document.getElementById("popup-picture-image-container").style.paddingTop = paddingTop;
     }
@@ -145,7 +146,7 @@ function rateAlbum() {
 
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     $(window).scroll(function (event) {
         var scroll = $(window).scrollTop();
         if (scroll > 0) {
@@ -161,7 +162,7 @@ $(document).ready(function() {
 
 $(function () {
     Dom.listAlbums();
-
+    Dom.openAnAlbum();
 });
 
 document.getElementById("add-album-submit").addEventListener("click", createAlbum);

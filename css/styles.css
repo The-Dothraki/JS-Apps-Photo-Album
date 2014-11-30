@@ -491,6 +491,24 @@ html, body {
     float: right;
 }
 
+.pic-download > a {
+    text-decoration: none;
+    width: 108px;
+    height: 40px;
+    float: right;
+    text-align: right;
+    text-transform: uppercase;
+    font-weight: 600;
+    -webkit-transition: opacity 0.2s;
+    -moz-transition: opacity 0.2s;
+    -ms-transition: opacity 0.2s;
+    -o-transition: opacity 0.2s;
+    transition: opacity 0.2s;
+    color: #000000;
+    opacity: 0.9;
+    font-size: 14px;
+}
+
 .pic-download {
     width: 108px;
     height: 40px;
