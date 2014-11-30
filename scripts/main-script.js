@@ -32,7 +32,7 @@ function addCommentToAlbum(event) {
         Queries.getObjectById("Album", albumId).then(function (album) {
             Actions.addCommentToAlbum(validName, commentContent, album);
         }).then(function (result) {
-            closePopup();
+            emptyFields();
             alert('The comment was successfully added."');
         });
     } catch (error) {
@@ -123,6 +123,11 @@ function loadPopup() {
     setSize();
 }
 
+function emptyFields() {
+    document.getElementById("name-for-album-comment").value = '';
+    document.getElementById("textareaAlbumComment").value = '';
+}
+
 function closePopup() {
     document.getElementById("popup-picture").style.display = "none";
     document.getElementById("popup-add-album").style.display = "none";
@@ -195,4 +200,3 @@ $(function () {
 
 document.getElementById("add-album-submit").addEventListener("click", createAlbum);
 document.getElementById("add-picture-submit").addEventListener("click", addPictureToAlbum);
-document.getElementById("add-comment-button").addEventListener("click", addCommentToAlbum);
