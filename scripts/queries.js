@@ -33,6 +33,16 @@ var Queries = (function () {
     return query.find();
   }
 
+  function getCommentsByAlbum(album) {
+    resultsQuery = undefined;
+
+    Comment = Parse.Object.extend("Comment");
+    query = new Parse.Query(Comment);
+    query.equalTo("album", album);
+
+    return query.find();
+  }
+
   /* object, pointedObject are names of tables,
     example : object is album and pointer is picture
     return JSON
@@ -95,6 +105,7 @@ var Queries = (function () {
     getObjectById: getObjectById,
     getObjectsByName: getObjectsByName,
     getPicturesByAlbum: getPicturesByAlbum,
-    getObjectAndPointer: getObjectAndPointer
+    getObjectAndPointer: getObjectAndPointer,
+    getCommentsByAlbum: getCommentsByAlbum
   }
 }());
