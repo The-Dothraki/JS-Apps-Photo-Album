@@ -55,13 +55,13 @@
             var li = $('<li>');
             var ul = $('<ul>');
             var albumName = this.title;
+            var albumID = this.id;
 
             div.attr('id', 'back-button').attr('onclick', 'collapseAlbum()')
                 .attr('class', 'back-button-change').attr('style', 'display: block;');
-            h2.attr('id', 'opened-album-title').text(albumName);
+            h2.attr('id', 'opened-album-title').attr('class', albumID).text(albumName);
             ul.attr('id', 'album-images-container');
 
-            var albumID = this.id;
             var Album = Parse.Object.extend("Album");
             var album = new Album();
             album.id = albumID;

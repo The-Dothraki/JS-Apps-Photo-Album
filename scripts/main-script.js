@@ -1,6 +1,8 @@
 function addPictureToAlbum(event) {
     var picName = document.getElementById("picture-name").value;
-    var albumId = "LAi8wXfsLm";
+
+    var openedAlbum = document.getElementById('opened-album-title');
+    var albumId = openedAlbum.getAttribute('class');
 
     try {
         var validPicName = validateString(picName, 'Picture name');
@@ -10,7 +12,7 @@ function addPictureToAlbum(event) {
             Actions.addPictureToAlbum(validPicName, picFile, album);
         }).then(function (result) {
             closePopup();
-            alert('The picture was added to the album.');
+            alert('The picture was successfully added to the album "' + openedAlbum.innerHTML + '".');
         });
     } catch (error) {
         alert(error.message);

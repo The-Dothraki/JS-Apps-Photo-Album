@@ -1,16 +1,16 @@
-var Actions = (function() {
+var Actions = (function () {
     var Picture = Parse.Object.extend("Picture"),
         Category = Parse.Object.extend("Category"),
         Album = Parse.Object.extend("Album");
 
-    function uploadPicture (name) {
+    function uploadPicture(name) {
         var fileUploadControl = document.getElementById("image-file");
 
         if (fileUploadControl.files.length > 0) {
-          var file = fileUploadControl.files[0];         
-          var parseFile = new Parse.File(name, file);
+            var file = fileUploadControl.files[0];
+            var parseFile = new Parse.File(name, file);
 
-          return parseFile;
+            return parseFile;
         } else {
             throw new Error('Couldn\'t upload the picture!');
         }
