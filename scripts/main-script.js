@@ -19,6 +19,27 @@ function addPictureToAlbum(event) {
     }
 }
 
+function addCommentToAlbum(event) {
+    var commentContent = document.getElementById("textareaAlbumComment").value;
+    var commentOf = document.getElementById("name-for-album-comment").value.trim();
+
+    var openedAlbum = document.getElementById('opened-album-title');
+    var albumId = openedAlbum.getAttribute('class');
+
+    try {
+        var validName = validateString(commentOf, 'Name');
+
+        Queries.getObjectById("Album", albumId).then(function (album) {
+            Actions.addCommentToAlbum(validName, commentContent, album);
+        }).then(function (result) {
+            closePopup();
+            alert('The comment was successfully added."');
+        });
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
 function createAlbum(event) {
     var albumName = document.getElementById("album-name").value.trim(),
         a = document.getElementById("album-category"),
@@ -174,3 +195,4 @@ $(function () {
 
 document.getElementById("add-album-submit").addEventListener("click", createAlbum);
 document.getElementById("add-picture-submit").addEventListener("click", addPictureToAlbum);
+document.getElementById("add-comment-button").addEventListener("click", addCommentToAlbum);
