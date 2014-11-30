@@ -138,7 +138,7 @@
 
             <!----------------------------------->
             <!------- ALL ALBUMS ARE HERE ------->
-            <!----------------------------------->
+            <!--------------------------------- -->
 
             <ul id="album-list">
                 <li class="album" onclick="openAlbum()">
@@ -236,7 +236,35 @@
         </div>
         <div id="album-opened-container">
             <div id="back-button" onclick="collapseAlbum()"></div>
+
             <h2 id="opened-album-title">Opened Album Name </h2>
+
+            <section id="popup-album-comment-container">
+                <section id="album-all-comments">
+                    <ul>
+                        <li>
+                            <header>
+                                <span id="commentOf">Damian Dobrev</span><br>
+                                <span id="commentDate">25.11.2014</span>
+                            </header>
+                            <article id="album-comment-article">
+                                The comment itself! The comment itself! The comment itself! The comment itself! The comment itself!
+                            </article>
+                        </li>
+                    </ul>
+                </section>
+                <section id="add-album-comment">
+                    <span class="small-album-title">Add a comment</span>
+                    <form>
+                        <input type="text" id="name-for-album-comment" placeholder="Enter your name">
+                        <br>
+                        <textarea id="textareaAlbumComment" placeholder="Enter a comment"></textarea>
+                        <div id="add-comment-button" class="add-buttons">Add comment</div>
+                    </form>
+                </section>
+            </section>
+            <div id="clearDiv"></div>
+
 
             <ul id="album-images-container">
                 <li>
@@ -403,9 +431,9 @@
         footer
     </footer>
 </div>
-	
+
 	<!-- TODO: Use require JS -->
-	
+
 	<script type="text/javascript">
 		Parse.initialize("6bjvgCqdQXoWQGLre6KwR7mmxkCBjF03ClAXLQ6l", "RdajQSeLGu5UDhj8142Kp6xkHIJIatuWuwUifZmW");
 	</script>
