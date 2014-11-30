@@ -94,6 +94,7 @@ function collapseAlbum() {
     document.getElementById("rate-album").style.display = "none";
     $('#album-opened-container ul').remove();
     $('#album-opened-container h2').remove();
+    $('#popup-album-comment-container').remove();
 }
 
 function loadPopup() {

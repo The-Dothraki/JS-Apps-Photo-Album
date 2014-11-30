@@ -35,8 +35,15 @@
                     .append($('<div>').attr('class', 'icon-album-hover'));
 
                 //footer
-                footer.append($('<section>').attr('class', 'alb-comments-f').text(album.comments.length + ' com'))
-                    .append($('<section>').attr('class', 'alb-rating-f').text(album.rating + ' / 10'));
+                var sum = 0;
+                for (var i = 0; i < album.rating.length; i++) {
+                    sum += parseInt(album.rating[i], 10);
+                }
+
+                var avg = sum / album.rating.length;
+
+                footer.append($('<section>').attr('class', 'alb-comments-f').text('Rating'))
+                    .append($('<section>').attr('class', 'alb-rating-f').text(avg.toFixed(2) + ' / 10'));
 
 
                 li.append(h)
@@ -99,6 +106,51 @@
                 };
             });
 
+            var sectionCommentsContainer = $('<section>');
+            sectionCommentsContainer.attr('id', 'popup-album-comment-container');
+
+            var sectionAllComments = $('<section>');
+            sectionAllComments.attr('id', 'album-all-comments');
+
+
+
+            var ulComments = $('<ul>');
+
+            var commentsForm = $('<form>');
+            commentsForm.append($('<input>').attr('type', 'text').attr('id', 'name-for-album-comment').attr('placeholder', 'Enter your name'))
+                .append($('<br>')).append($('<textarea>').attr('id', 'textareaAlbumComment').attr('placeholder', 'Enter a comment'))
+                .append($('<div>').attr('id', 'add-comment-button').attr('class', 'add-buttons').text('Add comment'));
+
+            var sectionAddAlbumComment = $('<section>');
+            sectionAddAlbumComment.attr('id', 'add-album-comment')
+                .append($('<span>').attr('class', 'small-album-title').text('Add a comment'))
+                .append(commentsForm);
+
+            var clearDiv = $('<div>');
+            clearDiv.attr('id', 'clearDiv');
+
+            Queries.getCommentsByAlbum(album).then(function (album) {
+                for (var i = 0; i < album.length; i++) {
+                    var commentOf = album[i].attributes.commentOf;
+                    var commentContent = album[i].attributes.commentContent;
+                    var commentDate = formatDate(album[i].createdAt);
+
+                    var headerComments = $('<header>');
+                    var articleComment = $('<article>');
+
+                    headerComments.append($('<span>').attr('id', 'commentOf').text(commentOf))
+                        .append($('<br>'))
+                        .append($('<span>').attr('id', 'commentDate').text(commentDate));
+
+                    articleComment.attr('id', 'album-comment-article').text(commentContent);
+
+                    ulComments.append($('<li>').append(headerComments).append(articleComment));
+                };
+                sectionAllComments.append(ulComments);
+                sectionCommentsContainer.append(sectionAllComments).append(sectionAddAlbumComment);
+            });
+
+
             function formatDate(obj) {
 
                 var months = ['01', '02', '03', '04', '05', '06',
@@ -111,7 +163,7 @@
 
 
 
-            albumContainer.append(h2).append(ul);
+            albumContainer.append(h2).append(sectionCommentsContainer).append(clearDiv).append(ul);
         });
     }
 
