@@ -40,6 +40,10 @@ function createAlbum(event) {
     }
 }
 
+function loadHomePage() {
+    window.location.reload();
+}
+
 function createCategory() {
     var catName = "Cars"; // Get from input field
 

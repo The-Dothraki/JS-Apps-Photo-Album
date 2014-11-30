@@ -89,6 +89,9 @@ html, body {
     -o-transition: all 0.4s ease;
     transition: all 0.4s ease;
 }
+#logo-container:hover {
+    cursor: pointer;
+}
 .fixed-header #logo-container {
     height: 50px !important;
     padding: 8px 0 0 0;
