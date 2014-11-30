@@ -194,6 +194,7 @@ $(document).ready(function () {
 })
 
 $(function () {
+    Dom.listCategotes();
     Dom.listAlbums();
     Dom.openAnAlbum();
 });

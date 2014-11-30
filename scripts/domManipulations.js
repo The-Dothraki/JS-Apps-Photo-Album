@@ -3,7 +3,6 @@
 
     function listAllAlbums() {
         Queries.getObjectAndPointer("Album", "Picture", function (result) {
-
             result.forEach(function (pic, i) {
                 var album = result[i];
                 var li = $('<li>');
@@ -53,6 +52,7 @@
             });
         });
     }
+
 
     function openAnAlbum() {
         $(document).on('click', 'li', function () {
@@ -169,9 +169,27 @@
         });
     }
 
+    function listCategotes() {
+        Category = Parse.Object.extend("Category");
+        var query = new Parse.Query(Category);
+        query.find({
+            success: function (results) {
+                console.log(results);
+                results.forEach(function (i) {
+                    $(".categories-in-dropdown")
+                      .append($('<option></option>')
+                        .val(i.id)
+                        .html(i.attributes.name));
+                })
+            }
+        });
+
+    };
+
     return {
         listAlbums: listAllAlbums,
         openAnAlbum: openAnAlbum,
+        listCategotes: listCategotes,
     }
 
 })();
