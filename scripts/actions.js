@@ -1,7 +1,8 @@
 var Actions = (function () {
     var Picture = Parse.Object.extend("Picture"),
         Category = Parse.Object.extend("Category"),
-        Album = Parse.Object.extend("Album");
+        Album = Parse.Object.extend("Album"),
+        Comment = Parse.Object.extend("Comment");
 
     function uploadPicture(name) {
         var fileUploadControl = document.getElementById("image-file");
@@ -49,8 +50,14 @@ var Actions = (function () {
         // TODO:
     }
 
-    function addCommentToAlbum(album, comment) {
-        // TODO:
+    function addCommentToAlbum(commentOf, commentContent, album) {
+        var comm = new Comment();
+
+        comm.set("commentOf", commentOf);
+        comm.set("commentContent", commentContent);
+        comm.set("album", album);
+
+        return comm.save();
     }
 
     function ratePicture(picture, rating) {

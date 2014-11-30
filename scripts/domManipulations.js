@@ -161,8 +161,6 @@
                     '.' + obj.getFullYear();
             }
 
-
-
             albumContainer.append(h2).append(sectionCommentsContainer).append(clearDiv).append(ul);
         });
     }
