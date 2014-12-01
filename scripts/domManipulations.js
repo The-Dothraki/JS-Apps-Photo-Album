@@ -55,13 +55,13 @@
 
     function openAnAlbum() {
         $(document).on('click', 'li', function () {
-            var albumContainer = $("#album-opened-container");
+            var albumContainer = $("#album-opened-container");            
             var div = $('<div>');
             var h2 = $('<h2>');
             var li = $('<li>');
             var ul = $('<ul>');
             var albumName = this.title;
-            var albumID = this.id;
+            var albumID = this.id;            
 
             div.attr('id', 'back-button').attr('onclick', 'collapseAlbum()')
                 .attr('class', 'back-button-change').attr('style', 'display: block;');
@@ -70,7 +70,7 @@
 
             var Album = Parse.Object.extend("Album");
             var album = new Album();
-            album.id = albumID;
+            album.id = albumID;            
 
             Queries.getPicturesByAlbum(album).then(function (album) {
                 for (var i = 0; i < album.length; i++) {

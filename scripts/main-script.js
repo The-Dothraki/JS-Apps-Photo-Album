@@ -57,8 +57,24 @@ function createAlbum(event) {
             .then(function (result) {
                 console.log("Album created.");
                 closePopup();
+                showVal(0);
             });
     }
+}
+
+function rateAlbum() {
+    var openedAlbum = document.getElementById('opened-album-title');
+    var albumId = openedAlbum.getAttribute('class');
+    var rating = document.getElementById("rate-album-range").value;
+    Actions.rateAlbum(albumId, parseInt(rating),
+             function succes() {
+                 alert('The album was successfully rated with ' + rating + ' !');
+                 closePopup();
+                 document.getElementById("rate-album-range").value = 0;
+                 document.getElementById("rate-album-value").innerHTML = "Rate: " + 0;
+             }, function error(error) {
+                 alert(error);
+             });
 }
 
 function loadHomePage() {
@@ -132,6 +148,7 @@ function closePopup() {
     document.getElementById("popup-picture").style.display = "none";
     document.getElementById("popup-add-album").style.display = "none";
     document.getElementById("popup-add-picture").style.display = "none";
+    document.getElementById("popup-rate-album").style.display = "none";
 }
 
 function setSize() {
@@ -175,8 +192,12 @@ function loadAddPicture() {
     document.getElementById("popup-add-picture").style.display = "block";
 }
 
-function rateAlbum() {
+function loadRateAlbum() {
+    document.getElementById("popup-rate-album").style.display = "block";
+}
 
+function showVal(newVal) {
+    document.getElementById("rate-album-value").innerHTML = "Rate: " + newVal;
 }
 
 $(document).ready(function () {
@@ -201,3 +222,4 @@ $(function () {
 
 document.getElementById("add-album-submit").addEventListener("click", createAlbum);
 document.getElementById("add-picture-submit").addEventListener("click", addPictureToAlbum);
+document.getElementById("rate-album-submit").addEventListener("click", rateAlbum);
