@@ -1,55 +1,54 @@
 ﻿var Dom = (function () {
     var mainContainer = $("#album-list");
 
-    function listAllAlbums() {
-        Queries.getObjectAndPointer("Album", "Picture", function (result) {
-            result.forEach(function (pic, i) {
-                var album = result[i];
-                var li = $('<li>');
-                var div = $('<div>');
-                var h = $('<h3>');
-                var footer = $('<footer>');
-                var ul = $('<ul>');
-                var displayedPictureCount = 0;
+    function listAllAlbums(albums) {
 
-                li.attr('id', pic.objectId).attr('title', pic.name).attr('class', 'album').attr('onclick', 'openAlbum()');
+        albums.forEach(function (pic, i) {
+            var album = albums[i];
+            var li = $('<li>');
+            var div = $('<div>');
+            var h = $('<h3>');
+            var footer = $('<footer>');
+            var ul = $('<ul>');
+            var displayedPictureCount = 0;
 
-                //h3
-                h.attr('class', 'album-title').text(album.name);
+            li.attr('id', pic.objectId).attr('title', pic.name).attr('class', 'album').attr('onclick', 'openAlbum()');
 
-                //div
-                div.attr('class', 'album-pic-holder').append(ul);
-                pic.picture.forEach(function (x) {
-                    var imgLi = $('<li>').append($('<img>').attr('src', x.file.url));
+            //h3
+            h.attr('class', 'album-title').text(album.name);
 
-                    //hide picture if album has more than
-                    if (++displayedPictureCount > 4) {
-                        imgLi.hide();
-                    }
-                    ul.append(imgLi);
+            //div
+            div.attr('class', 'album-pic-holder').append(ul);
+            pic.picture.forEach(function (x) {
+                var imgLi = $('<li>').append($('<img>').attr('src', x.file.url));
 
-                });
-                div.append($('<div>').attr('class', 'white-overlay'))
-                    .append($('<div>').attr('class', 'hover-black'))
-                    .append($('<div>').attr('class', 'icon-album-hover'));
-
-                //footer
-                var sum = 0;
-                for (var i = 0; i < album.rating.length; i++) {
-                    sum += parseInt(album.rating[i], 10);
+                //hide picture if album has more than
+                if (++displayedPictureCount > 4) {
+                    imgLi.hide();
                 }
+                ul.append(imgLi);
 
-                var avg = sum / album.rating.length;
-
-                footer.append($('<section>').attr('class', 'alb-comments-f').text('Rating'))
-                    .append($('<section>').attr('class', 'alb-rating-f').text(avg.toFixed(2) + ' / 10'));
-
-
-                li.append(h)
-                    .append(div)
-                    .append(footer);
-                mainContainer.append(li);
             });
+            div.append($('<div>').attr('class', 'white-overlay'))
+                .append($('<div>').attr('class', 'hover-black'))
+                .append($('<div>').attr('class', 'icon-album-hover'));
+
+            //footer
+            var sum = 0;
+            for (var i = 0; i < album.rating.length; i++) {
+                sum += parseInt(album.rating[i], 10);
+            }
+
+            var avg = sum / album.rating.length;
+
+            footer.append($('<section>').attr('class', 'alb-comments-f').text('Rating'))
+                .append($('<section>').attr('class', 'alb-rating-f').text(avg.toFixed(2) + ' / 10'));
+
+
+            li.append(h)
+                .append(div)
+                .append(footer);
+            mainContainer.append(li);
         });
     }
 
@@ -174,12 +173,11 @@
         var query = new Parse.Query(Category);
         query.find({
             success: function (results) {
-                console.log(results);
                 results.forEach(function (i) {
                     $(".categories-in-dropdown")
                       .append($('<option></option>')
-                        .val(i.id)
-                        .html(i.attributes.name));
+                      .val(i.id)
+                      .html(i.attributes.name));
                 })
             }
         });
