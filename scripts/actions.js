@@ -64,8 +64,8 @@ var Actions = (function () {
         // TODO:
     }
 
-    function rateAlbum(album, rating) {
-        // TODO:
+    function rateAlbum(albumId, rating, success, error) {
+        Queries.updateObjectArrayField("Album", albumId, "rating", rating, success, error);
     }
 
     function listAlbums() {
@@ -73,7 +73,7 @@ var Actions = (function () {
             Dom.listAlbums(result)
         },
         null,
-        {id:'rating'}
+        { id: 'rating' }
         );
 
     }
@@ -87,6 +87,6 @@ var Actions = (function () {
         addCommentToAlbum: addCommentToAlbum,
         ratePicture: ratePicture,
         rateAlbum: rateAlbum,
-        listAlbums:listAlbums,
+        listAlbums: listAlbums,
     }
 }());

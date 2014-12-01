@@ -44,7 +44,7 @@
                 </form>
                 <div id="add-album-button" onclick="loadAddAlbum()" class="add-buttons">Add album</div>
                 <div id="add-picture-button" onclick="loadAddPicture()" class="add-buttons">Add picture</div>
-                <div id="rate-album"  class="add-buttons">Rate album</div>
+                <div id="rate-album"  class="add-buttons" onclick="loadRateAlbum()">Rate album</div>
             </div>
         </section>
         <div id="main-container" class="cf">
@@ -159,6 +159,18 @@
                 <input type="file" id="image-file">
                 <br>
                 <div id="add-picture-submit" class="add-buttons">Add picture</div>
+            </form>
+        </div>
+    </div>
+    <div id="popup-rate-album" class="popup">
+        <div class="bodysize-close-popup" onclick="closePopup()"></div>
+        <div class="standard-popup">
+            <h2 class="standard-title">Rate Album</h2>
+            <form>
+                <label for="rate-album-value" id="rate-album-value">Rate: 0</label>                
+                <input type="range" id="rate-album-range" value="0" min="0" max="10" step="1" oninput="showVal(this.value)">
+                <br>
+                <div id="rate-album-submit" class="add-buttons">Add picture</div>
             </form>
         </div>
     </div>

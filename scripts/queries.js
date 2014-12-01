@@ -67,9 +67,6 @@ var Queries = (function () {
                       var obj = data[i].get(object).toJSON();
                       var point = data[i].toJSON();
 
-                      console.log(obj);
-
-
                       if (unique.indexOf(obj.objectId) === -1) {
                           obj[pointer] = [];
                           obj[pointer].push(point);
@@ -97,11 +94,34 @@ var Queries = (function () {
           });
     }
 
+    function updateObjectArrayField(tableName, fieldID, tableRow, addValue, success, error) {
+
+        var TableName = Parse.Object.extend(tableName);
+        var tableName = new TableName();
+        tableName.id = fieldID;
+
+        // Set a new value on quantity
+        tableName.add(tableRow, addValue);
+
+        // Save
+        tableName.save(null, {
+            success: function (tableName) {
+                success(tableName);
+            },
+            error: function (tableName, error) {
+                error(tableName, error);
+                // The save failed.
+                // error is a Parse.Error with an error code and description.
+            }
+        });
+    }
+
     return {
         getObjectById: getObjectById,
         getObjectsByName: getObjectsByName,
         getPicturesByAlbum: getPicturesByAlbum,
         getObjectAndPointer: getObjectAndPointer,
-        getCommentsByAlbum: getCommentsByAlbum
+        getCommentsByAlbum: getCommentsByAlbum,
+        updateObjectArrayField: updateObjectArrayField,
     }
 }());

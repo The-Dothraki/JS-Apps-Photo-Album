@@ -654,7 +654,7 @@ article#album-comment-article {
     z-index: 20;
     overflow: hidden;
 }
-#popup-picture, #popup-add-album, #popup-add-picture {
+#popup-picture, #popup-add-album, #popup-add-picture, #popup-rate-album {
     display: none;
 }
 .bodysize-close-popup {
@@ -831,7 +831,7 @@ input[type="text"], #popup-add-album select {
     -o-transition: all 0.2s;
     transition: all 0.2s;
 }
-#add-album-submit:hover, #add-picture-submit:hover {
+#add-album-submit:hover, #add-picture-submit:hover, #rate-album-submit:hover {
     opacity: 0.7;
     cursor: pointer;
 }
