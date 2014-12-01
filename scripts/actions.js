@@ -68,6 +68,16 @@ var Actions = (function () {
         // TODO:
     }
 
+    function listAlbums() {
+        Queries.getObjectAndPointer("Album", "Picture", function (result) {
+            Dom.listAlbums(result)
+        },
+        null,
+        {id:'rating'}
+        );
+
+    }
+
     return {
         uploadPicture: uploadPicture,
         addPictureToAlbum: addPictureToAlbum,
@@ -76,6 +86,7 @@ var Actions = (function () {
         addCommentToPicture: addCommentToPicture,
         addCommentToAlbum: addCommentToAlbum,
         ratePicture: ratePicture,
-        rateAlbum: rateAlbum
+        rateAlbum: rateAlbum,
+        listAlbums:listAlbums,
     }
 }());

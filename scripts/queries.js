@@ -45,25 +45,30 @@ var Queries = (function () {
 
     /* object, pointedObject are names of tables,
       example : object is album and pointer is picture
-      return JSON
+      execute callback with parameter JSON object
+      filter is optional. Filter is array of two [a]
+      sort is optional. sort is array of two parameters {sort : asceding/desending,id: id}
     */
-    function getObjectAndPointer(object, pointer, callback) {
+    function getObjectAndPointer(object, pointer, callback, filter, sort) {
         var arr = [];
         var unique = [];
 
         object = object.toLowerCase();
 
-        var parseObj = Parse.Object.extend(pointer);
+        var pointerObj = Parse.Object.extend(pointer);
         pointer = pointer.toLowerCase();
 
-        new Parse.Query(parseObj)
-          .include(object)
+        query = new Parse.Query(pointerObj);
+        query.include(object)
           .find({
               success: function (data) {
                   for (var i = 0; i < data.length; i++) {
 
                       var obj = data[i].get(object).toJSON();
                       var point = data[i].toJSON();
+
+                      console.log(obj);
+
 
                       if (unique.indexOf(obj.objectId) === -1) {
                           obj[pointer] = [];
@@ -77,6 +82,12 @@ var Queries = (function () {
                           result[0][pointer].push(point);
                       }
                   }
+
+                  //http://stackoverflow.com/questions/3762589/fastest-javascript-summation of array
+
+                  arr.sort(function (x, y) {
+                      return y[sort.id].reduce(function (pv, cv) { return pv + cv; }, 0) / y[sort.id].length - x.rating.reduce(function (pv, cv) { return pv + cv; }, 0) / x.rating.length;
+                  });
                   callback(arr);
               },
 
