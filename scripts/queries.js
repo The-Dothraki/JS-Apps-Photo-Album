@@ -43,6 +43,10 @@ var Queries = (function () {
         return query.find();
     }
 
+    function calcRatingByObject(objectId) {
+        //TODO
+    }
+
     /* object, pointedObject are names of tables,
       example : object is album and pointer is picture
       execute callback with parameter JSON object
@@ -109,7 +113,8 @@ var Queries = (function () {
                 success(tableName);
             },
             error: function (tableName, error) {
-                error(tableName, error);
+                console.log(error);
+
                 // The save failed.
                 // error is a Parse.Error with an error code and description.
             }

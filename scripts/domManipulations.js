@@ -54,14 +54,14 @@
 
 
     function openAnAlbum() {
-        $(document).on('click', 'li', function () {
-            var albumContainer = $("#album-opened-container");            
+        $('#main-container').on('click', '.album', function () {
+            var albumContainer = $("#album-opened-container");
             var div = $('<div>');
             var h2 = $('<h2>');
             var li = $('<li>');
             var ul = $('<ul>');
             var albumName = this.title;
-            var albumID = this.id;            
+            var albumID = this.id;
 
             div.attr('id', 'back-button').attr('onclick', 'collapseAlbum()')
                 .attr('class', 'back-button-change').attr('style', 'display: block;');
@@ -70,15 +70,18 @@
 
             var Album = Parse.Object.extend("Album");
             var album = new Album();
-            album.id = albumID;            
+            album.id = albumID;
 
             Queries.getPicturesByAlbum(album).then(function (album) {
                 for (var i = 0; i < album.length; i++) {
                     var url = album[i].attributes.file._url;
                     var picName = album[i].attributes.name;
                     var picDate = "Date: " + formatDate(album[i].createdAt);
-                    var picRating = "Rating: " + album[i]._serverData.rating + " / 10";
+                    var picRating =
+                        "Rating: " + album[i]._serverData.rating.reduce(function (pv, cv) { return pv + cv; }, 0) / album[i]._serverData.rating.length + " / 10";
+                    var picId = album[i].id;
 
+                    
 
                     var header = $('<header>');
                     var h3 = $('<h3>');
@@ -99,7 +102,7 @@
 
                     footer.append($('<section>').attr('class', 'pic-date').text(picDate))
                         .append($('<section>').attr('class', 'pic-download').append(a))
-                        .append($('<section>').attr('class', 'pic-rating').text(picRating));
+                        .append($('<section>').attr('id', picId).attr('class', 'pic-rating').text(picRating));
 
                     ul.append(($('<li>').append(header).append(section).append(footer)));
                 };
@@ -151,9 +154,10 @@
                 };
                 sectionAllComments.append(ulComments);
                 sectionCommentsContainer.append(sectionAllComments).append(sectionAddAlbumComment);
+
+                $('#album-images-container').on('click', '.pic-rating', loadRatePicture);
+
             });
-
-
             function formatDate(obj) {
 
                 var months = ['01', '02', '03', '04', '05', '06',

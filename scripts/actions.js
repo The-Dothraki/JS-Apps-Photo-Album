@@ -60,8 +60,8 @@ var Actions = (function () {
         return comm.save();
     }
 
-    function ratePicture(picture, rating) {
-        // TODO:
+    function ratePicture(pictureId, rating, success, error) {
+        Queries.updateObjectArrayField("Picture", pictureId, "rating", rating, success, error);
     }
 
     function rateAlbum(albumId, rating, success, error) {
