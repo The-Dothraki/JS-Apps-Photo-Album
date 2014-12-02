@@ -55,7 +55,7 @@ function createAlbum(event) {
                 Actions.createAlbum(albumName, category);
             })
             .then(function (result) {
-                Queries.getLastSaveObject("Album", function (x) {  
+                Queries.getLastSaveObject("Album", function (x) {
                     Dom.listAlbums(x);
                 });
                 console.log("Album created.");
@@ -74,6 +74,14 @@ function rateAlbum() {
                  closePopup();
                  document.getElementById("rate-album-range").value = 0;
                  document.getElementById("rate-album-value").innerHTML = "Rate: " + 0;
+                 var album = (JSON.parse(localStorage.albums).filter(function (x) {
+                     return x.objectId == albumId;
+                 }));
+                 var albumRating = typeof (album[0].rating) === 'undefined' ? rating : Dom.averageOfArray([0].rating);
+
+                 var albumRatingSection = $('li#' + albumId + ' footer section.alb-rating-f').text(albumRating + '/10');
+                 console.log(album);
+
              }, function error(error) {
                  alert(error);
              });
@@ -239,12 +247,10 @@ $(document).ready(function () {
 })
 
 $(function () {
+    console.time("start");
     Actions.listAlbums();
     Dom.listCategotes();
     Dom.openAnAlbum();
-    Queries.getLastSaveObject("Album", function (x) {
-        console.log(x);
-    });
 });
 
 document.getElementById("add-album-submit").addEventListener("click", createAlbum);
