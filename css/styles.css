@@ -597,7 +597,10 @@ article#album-comment-article {
     float: left;
 }
 .pic-rating {
+    width: 125px;   
     float: right;
+    text-align: right;
+    background: url("../images/rate-icon.png") -2px 11px no-repeat;   
 }
 
 .pic-download > a {
@@ -654,7 +657,7 @@ article#album-comment-article {
     z-index: 20;
     overflow: hidden;
 }
-#popup-picture, #popup-add-album, #popup-add-picture, #popup-rate-album {
+#popup-picture, #popup-add-album, #popup-add-picture, #popup-rate-album, #popup-rate-picture {
     display: none;
 }
 .bodysize-close-popup {
@@ -831,7 +834,7 @@ input[type="text"], #popup-add-album select {
     -o-transition: all 0.2s;
     transition: all 0.2s;
 }
-#add-album-submit:hover, #add-picture-submit:hover, #rate-album-submit:hover {
+#add-album-submit:hover, #add-picture-submit:hover, #rate-album-submit:hover, #rate-picture-submit:hover {
     opacity: 0.7;
     cursor: pointer;
 }

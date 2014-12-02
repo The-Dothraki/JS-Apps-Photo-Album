@@ -77,6 +77,21 @@ function rateAlbum() {
              });
 }
 
+function ratePicture(event) {
+    var pictureID = $('#popup-rate-picture form').attr('id');
+    var rating = document.getElementById("rate-picture-range").value;
+   
+    Actions.ratePicture(pictureID, parseInt(rating),
+             function succes() {
+                 alert('The picture was successfully rated with ' + rating + ' !');
+                 closePopup();
+                 document.getElementById("rate-picture-range").value = 0;
+                 document.getElementById("rate-picture-value").innerHTML = "Rate: " + 0;
+             }, function error(error) {
+                 alert(error);
+             });
+}
+
 function loadHomePage() {
     window.location.reload();
 }
@@ -149,6 +164,7 @@ function closePopup() {
     document.getElementById("popup-add-album").style.display = "none";
     document.getElementById("popup-add-picture").style.display = "none";
     document.getElementById("popup-rate-album").style.display = "none";
+    document.getElementById("popup-rate-picture").style.display = "none";
 }
 
 function setSize() {
@@ -196,8 +212,14 @@ function loadRateAlbum() {
     document.getElementById("popup-rate-album").style.display = "block";
 }
 
-function showVal(newVal) {
-    document.getElementById("rate-album-value").innerHTML = "Rate: " + newVal;
+function loadRatePicture() {
+    document.getElementById("popup-rate-picture").style.display = "block";
+    $('#popup-rate-picture form').attr('id', this.id);
+}
+
+function showVal(newVal, id) {
+    id = id.toString().replace('range', 'value');
+    document.getElementById(id).innerHTML = "Rate: " + newVal;   
 }
 
 $(document).ready(function () {
@@ -223,3 +245,4 @@ $(function () {
 document.getElementById("add-album-submit").addEventListener("click", createAlbum);
 document.getElementById("add-picture-submit").addEventListener("click", addPictureToAlbum);
 document.getElementById("rate-album-submit").addEventListener("click", rateAlbum);
+document.getElementById("rate-picture-submit").addEventListener("click", ratePicture);
