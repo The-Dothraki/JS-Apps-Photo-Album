@@ -55,9 +55,11 @@ function createAlbum(event) {
                 Actions.createAlbum(albumName, category);
             })
             .then(function (result) {
+                Queries.getLastSaveObject("Album", function (x) {  
+                    Dom.listAlbums(x);
+                });
                 console.log("Album created.");
                 closePopup();
-                showVal(0);
             });
     }
 }
@@ -80,7 +82,7 @@ function rateAlbum() {
 function ratePicture(event) {
     var pictureID = $('#popup-rate-picture form').attr('id');
     var rating = document.getElementById("rate-picture-range").value;
-   
+
     Actions.ratePicture(pictureID, parseInt(rating),
              function succes() {
                  alert('The picture was successfully rated with ' + rating + ' !');
@@ -219,7 +221,7 @@ function loadRatePicture() {
 
 function showVal(newVal, id) {
     id = id.toString().replace('range', 'value');
-    document.getElementById(id).innerHTML = "Rate: " + newVal;   
+    document.getElementById(id).innerHTML = "Rate: " + newVal;
 }
 
 $(document).ready(function () {
@@ -240,6 +242,9 @@ $(function () {
     Actions.listAlbums();
     Dom.listCategotes();
     Dom.openAnAlbum();
+    Queries.getLastSaveObject("Album", function (x) {
+        console.log(x);
+    });
 });
 
 document.getElementById("add-album-submit").addEventListener("click", createAlbum);

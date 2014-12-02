@@ -41,7 +41,7 @@ var Actions = (function () {
 
         album = new Album();
         album.set("name", name);
-        album.set("category", category);
+        album.set("category", category);        
 
         return album.save();
     }

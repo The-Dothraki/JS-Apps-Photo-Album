@@ -3,8 +3,7 @@
 
     function listAllAlbums(albums) {
 
-        albums.forEach(function (pic, i) {
-            var album = albums[i];
+        albums.forEach(function (album, i) {
             var li = $('<li>');
             var div = $('<div>');
             var h = $('<h3>');
@@ -12,38 +11,39 @@
             var ul = $('<ul>');
             var displayedPictureCount = 0;
 
-            li.attr('id', pic.objectId).attr('title', pic.name).attr('class', 'album').attr('onclick', 'openAlbum()');
+            li.attr('id', album.objectId).attr('title', album.name).attr('class', 'album').attr('onclick', 'openAlbum()');
 
             //h3
             h.attr('class', 'album-title').text(album.name);
 
             //div
             div.attr('class', 'album-pic-holder').append(ul);
-            pic.picture.forEach(function (x) {
-                var imgLi = $('<li>').append($('<img>').attr('src', x.file.url));
+            if (album.picture) {
 
-                //hide picture if album has more than
-                if (++displayedPictureCount > 4) {
-                    imgLi.hide();
-                }
-                ul.append(imgLi);
 
-            });
+                album.picture.forEach(function (x) {
+                    var imgLi = $('<li>').append($('<img>').attr('src', x.file.url));
+
+                    //hide picture if album has more than
+                    if (++displayedPictureCount > 4) {
+                        imgLi.hide();
+                    }
+                    ul.append(imgLi);
+
+                });
+            }
             div.append($('<div>').attr('class', 'white-overlay'))
                 .append($('<div>').attr('class', 'hover-black'))
                 .append($('<div>').attr('class', 'icon-album-hover'));
 
             //footer
-            var sum = 0;
-            for (var i = 0; i < album.rating.length; i++) {
-                sum += parseInt(album.rating[i], 10);
-            }
+            console.log(album.rating);
 
-            var avg = sum / album.rating.length;
+
+            var footerText = typeof (album.rating) == "undefined" ? "Rate me" : averageOfArray(album.rating).toFixed(0);
 
             footer.append($('<section>').attr('class', 'alb-comments-f').text('Rating'))
-                .append($('<section>').attr('class', 'alb-rating-f').text(avg.toFixed(2) + ' / 10'));
-
+                .append($('<section>').attr('class', 'alb-rating-f').text(footerText + ' / 10'));
 
             li.append(h)
                 .append(div)
@@ -77,11 +77,11 @@
                     var url = album[i].attributes.file._url;
                     var picName = album[i].attributes.name;
                     var picDate = "Date: " + formatDate(album[i].createdAt);
-                    var picRating =
-                        "Rating: " + album[i]._serverData.rating.reduce(function (pv, cv) { return pv + cv; }, 0) / album[i]._serverData.rating.length + " / 10";
+                    var picRating = typeof (album[i]._serverData.rating) == "undefined" ? "Rate me" :
+                        "Rating: " + averageOfArray(album[i]._serverData.rating).toFixed(0) + " / 10";
                     var picId = album[i].id;
 
-                    
+
 
                     var header = $('<header>');
                     var h3 = $('<h3>');
@@ -172,6 +172,10 @@
         });
     }
 
+    function averageOfArray(arr) {
+        return arr.reduce(function (pv, cv) { return parseInt(pv) + parseInt(cv); }, 0) / arr.length;
+    }
+
     function listCategotes() {
         Category = Parse.Object.extend("Category");
         var query = new Parse.Query(Category);
@@ -193,5 +197,4 @@
         openAnAlbum: openAnAlbum,
         listCategotes: listCategotes,
     }
-
 })();
