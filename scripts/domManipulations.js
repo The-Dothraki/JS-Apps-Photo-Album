@@ -2,7 +2,7 @@
     var mainContainer = $("#album-list");
 
     function listAllAlbums(albums) {
-
+        console.time("123");
         albums.forEach(function (album, i) {
             var li = $('<li>');
             var div = $('<div>');
@@ -11,7 +11,7 @@
             var ul = $('<ul>');
             var displayedPictureCount = 0;
 
-            li.attr('id', album.objectId).attr('title', album.name).attr('class', 'album').attr('onclick', 'openAlbum()');
+            li.attr('id', album.objectId).attr('title', album.name).attr('data-container', album.category.objectId).attr('class', 'album').attr('onclick', 'openAlbum()');
 
             //h3
             h.attr('class', 'album-title').text(album.name);
@@ -37,9 +37,6 @@
                 .append($('<div>').attr('class', 'icon-album-hover'));
 
             //footer
-            console.log(album.rating);
-
-
             var footerText = typeof (album.rating) == "undefined" ? "Rate me" : averageOfArray(album.rating).toFixed(0);
 
             footer.append($('<section>').attr('class', 'alb-comments-f').text('Rating'))
@@ -48,8 +45,10 @@
             li.append(h)
                 .append(div)
                 .append(footer);
-            mainContainer.append(li);
+            mainContainer.append(li);           
         });
+        console.timeEnd("start");
+        console.timeEnd("123");
     }
 
 
@@ -64,7 +63,8 @@
             var albumID = this.id;
 
             div.attr('id', 'back-button').attr('onclick', 'collapseAlbum()')
-                .attr('class', 'back-button-change').attr('style', 'display: block;');
+               .attr('class', 'back-button-change').attr('style', 'display: block;');
+
             h2.attr('id', 'opened-album-title').attr('class', albumID).text(albumName);
             ul.attr('id', 'album-images-container');
 
@@ -196,5 +196,6 @@
         listAlbums: listAllAlbums,
         openAnAlbum: openAnAlbum,
         listCategotes: listCategotes,
+        averageOfArray: averageOfArray
     }
 })();
