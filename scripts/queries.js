@@ -121,6 +121,20 @@ var Queries = (function () {
         });
     }
 
+    function getLastSaveObject(tableName, callback) {
+        var pointerObj = Parse.Object.extend(tableName);
+
+        query = new Parse.Query(pointerObj);
+        query.descending('updatedAt');
+        query.first({
+            success: function (result) {
+                var arr = [];
+                arr.push(result.toJSON());
+                callback(arr);
+            }
+        })
+    }
+
     return {
         getObjectById: getObjectById,
         getObjectsByName: getObjectsByName,
@@ -128,5 +142,6 @@ var Queries = (function () {
         getObjectAndPointer: getObjectAndPointer,
         getCommentsByAlbum: getCommentsByAlbum,
         updateObjectArrayField: updateObjectArrayField,
+        getLastSaveObject: getLastSaveObject
     }
 }());
