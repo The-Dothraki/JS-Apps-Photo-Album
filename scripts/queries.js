@@ -152,10 +152,7 @@ var Queries = (function () {
         getCommentsByAlbum: getCommentsByAlbum,
         updateObjectArrayField: updateObjectArrayField,
         getLastSaveObject: getLastSaveObject,
-<<<<<<< HEAD
         getCommentsByPicture: getCommentsByPicture
-=======
->>>>>>> cfb07b0cd330e218c233488167248839a8cb7b2b
     }
 }());
 

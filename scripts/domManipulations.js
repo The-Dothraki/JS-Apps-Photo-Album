@@ -240,10 +240,7 @@
         listAlbums: listAllAlbums,
         openAnAlbum: openAnAlbum,
         listCategotes: listCategotes,
-<<<<<<< HEAD
-        loadPicturePopup: loadPicturePopup
-=======
+        loadPicturePopup: loadPicturePopup,
         averageOfArray: averageOfArray
->>>>>>> cfb07b0cd330e218c233488167248839a8cb7b2b
     }
 })();

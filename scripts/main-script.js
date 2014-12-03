@@ -277,9 +277,9 @@ $(function () {
 document.getElementById("add-album-submit").addEventListener("click", createAlbum);
 document.getElementById("add-picture-submit").addEventListener("click", addPictureToAlbum);
 document.getElementById("rate-album-submit").addEventListener("click", rateAlbum);
-<<<<<<< HEAD
+
 document.getElementById("rate-picture-submit").addEventListener("click", ratePicture);
 document.getElementById("add-picture-comment-button").addEventListener("click", addCommentToPicture);
-=======
+
 document.getElementById("rate-picture-submit").addEventListener("click", ratePicture);
->>>>>>> cfb07b0cd330e218c233488167248839a8cb7b2b
+
