@@ -94,6 +94,23 @@ function ratePicture(event) {
              });
 }
 
+function addCommentToPicture(event) {
+
+    var authorInput = document.getElementById("name-for-pic-comment"),
+        commentInput = document.getElementById("comment-value"),
+        author = authorInput.value,
+        comment = commentInput.value;
+        openedImageId = $("#pic-shown").attr("data-id");
+
+    Queries.getObjectById("Picture", openedImageId).then(function (picture) {
+        Actions.addCommentToPicture(author, comment, picture);
+    }).then(function (result) {
+        // TODO: success message and dynamic refresh
+        authorInput.value = "";
+        commentInput.value = "";
+    });
+}
+
 function loadHomePage() {
     window.location.reload();
 }
@@ -151,8 +168,9 @@ function collapseAlbum() {
     $('#popup-album-comment-container').remove();
 }
 
-function loadPopup() {
+function loadPopup(that) {
     document.getElementById("popup-picture").style.display = "block";
+    Dom.loadPicturePopup(that);
     setSize();
 }
 
@@ -236,6 +254,9 @@ $(document).ready(function () {
             document.getElementById("main").style.marginTop = "80px";
         }
     });
+    $(document).on("click", ".pic-hover", function() {
+        loadPopup($(this));
+    });
 })
 
 $(function () {
@@ -251,3 +272,4 @@ document.getElementById("add-album-submit").addEventListener("click", createAlbu
 document.getElementById("add-picture-submit").addEventListener("click", addPictureToAlbum);
 document.getElementById("rate-album-submit").addEventListener("click", rateAlbum);
 document.getElementById("rate-picture-submit").addEventListener("click", ratePicture);
+document.getElementById("add-picture-comment-button").addEventListener("click", addCommentToPicture);

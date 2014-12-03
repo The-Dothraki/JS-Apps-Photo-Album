@@ -67,57 +67,11 @@
         <div class="bodysize-close-popup" onclick="closePopup()"></div>
         <div id="popup-picture-container">
             <section id="popup-picture-image-container">
-                <img src="images/test1.jpg" id="pic-shown">
+                <img id="pic-shown">
             </section>
             <section id="popup-picture-comment-container">
                 <section id="pic-all-comments">
-                    <ul>
-                        <li>
-                            <header>
-                                <span>Damian Dobrev:</span>
-                                <span>25.11.2014</span>
-                            </header>
-                            <article>
-                                The comment itself! The comment itself! The comment itself! The comment itself! The comment itself!
-                            </article>
-                        </li>
-                        <li>
-                            <header>
-                                <span>Someone Else:</span>
-                                <span>25.11.2014</span>
-                            </header>
-                            <article>
-                                The comment itself!
-                            </article>
-                        </li>
-                        <li>
-                            <header>
-                                <span>Santa Claus:</span>
-                                <span>25.11.2014</span>
-                            </header>
-                            <article>
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                            </article>
-                        </li>
-                        <li>
-                            <header>
-                                <span>Santa Claus:</span>
-                                <span>25.11.2014</span>
-                            </header>
-                            <article>
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                            </article>
-                        </li>
-                        <li>
-                            <header>
-                                <span>Santa Claus:</span>
-                                <span>25.11.2014</span>
-                            </header>
-                            <article>
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                            </article>
-                        </li>
-                    </ul>
+                    <ul id="pic-comments-list"></ul>
                 </section>
                 <section id="add-comment">
                     <span class="small-title">Add a comment</span>
@@ -125,7 +79,7 @@
                         <label for="name-for-pic-comment">Name: </label>
                         <input type="text" id="name-for-pic-comment">
                         <textarea id="comment-value"></textarea>
-                        <div id="add-comment-button" class="add-buttons">Add comment</div>
+                        <div id="add-picture-comment-button" class="add-buttons">Add comment</div>
                     </form>
                 </section>
             </section>
