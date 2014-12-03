@@ -143,6 +143,16 @@ var Queries = (function () {
         })
     }
 
+    function getCommentsByPicture(picture) {
+        resultsQuery = undefined;
+
+        PictureComment = Parse.Object.extend("PictureComment");
+        query = new Parse.Query(PictureComment);
+        query.equalTo("picture", picture);
+
+        return query.find();
+    }
+
     return {
         getObjectById: getObjectById,
         getObjectsByName: getObjectsByName,
@@ -152,6 +162,7 @@ var Queries = (function () {
         getCommentsByAlbum: getCommentsByAlbum,
         updateObjectArrayField: updateObjectArrayField,
         getLastSaveObject: getLastSaveObject,
+        getCommentsByPicture: getCommentsByPicture
     }
 }());
 

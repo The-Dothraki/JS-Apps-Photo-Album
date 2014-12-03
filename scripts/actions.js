@@ -47,8 +47,15 @@ var Actions = (function () {
         return album.save();
     }
 
-    function addCommentToPicture(picture, comment) {
-        // TODO:
+    function addCommentToPicture(author, commentContent, picture) {
+        var picComment;
+
+        picComment = new PictureComment();
+        picComment.set("author", author);
+        picComment.set("commentContent", commentContent);
+        picComment.set("picture", picture);
+
+        return picComment.save();
     }
 
     function addCommentToAlbum(commentOf, commentContent, album) {
