@@ -98,7 +98,10 @@
                     header.append(h3);
 
                     section.append(img)
-                        .append($('<div>').attr('class', 'pic-hover').attr('onclick', 'loadPopup()'));
+                        .append($('<div>')
+                            .attr('class', 'pic-hover')
+                            .attr('data-id', picId)
+                            .attr('data-src', url));
 
                     footer.append($('<section>').attr('class', 'pic-date').text(picDate))
                         .append($('<section>').attr('class', 'pic-download').append(a))
@@ -158,15 +161,6 @@
                 $('#album-images-container').on('click', '.pic-rating', loadRatePicture);
 
             });
-            function formatDate(obj) {
-
-                var months = ['01', '02', '03', '04', '05', '06',
-                    '07', '08', '09', '10', '11', '12'
-                ];
-
-                return obj.getDate() + '.' + months[obj.getMonth()] +
-                    '.' + obj.getFullYear();
-            }
 
             albumContainer.append(h2).append(sectionCommentsContainer).append(clearDiv).append(ul);
         });
@@ -192,10 +186,64 @@
 
     };
 
+    function loadPicturePopup(pic) {
+        var picId = pic.attr("data-id"),
+            picSrc = pic.attr("data-src"),
+            ul = $("#pic-comments-list");
+
+        ul.html("");
+        $("#pic-shown")
+            .attr("src", picSrc)
+            .attr("data-id", picId);
+
+        Queries.getObjectById("Picture", picId)
+            .then(function(pic) {
+                Queries.getCommentsByPicture(pic)
+                    .then(function(comments) {
+
+                        var li,
+                            header,
+                            authorSpan,
+                            dateSpan,
+                            author,
+                            content,
+                            date,
+                            i;
+
+                        for (i in comments) {
+                            author = comments[i].attributes.author;
+                            content = comments[i].attributes.commentContent;
+                            date = formatDate(comments[i].createdAt);
+                            li = $("<li>");
+                            header = $("<header>")
+                                    .append($("<span>").text(author))
+                                    .append($("<span>").text(date));
+                            li.append(header)
+                                .append($("<article>").append(content));
+                            ul.append(li);
+                        }
+                    });
+            });
+    }
+
+    function formatDate(obj) {
+
+        var months = ['01', '02', '03', '04', '05', '06',
+            '07', '08', '09', '10', '11', '12'
+        ];
+
+        return obj.getDate() + '.' + months[obj.getMonth()] +
+            '.' + obj.getFullYear();
+    }
+
     return {
         listAlbums: listAllAlbums,
         openAnAlbum: openAnAlbum,
         listCategotes: listCategotes,
+<<<<<<< HEAD
+        loadPicturePopup: loadPicturePopup
+=======
         averageOfArray: averageOfArray
+>>>>>>> cfb07b0cd330e218c233488167248839a8cb7b2b
     }
 })();

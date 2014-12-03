@@ -134,6 +134,16 @@ var Queries = (function () {
         })
     }
 
+    function getCommentsByPicture(picture) {
+        resultsQuery = undefined;
+
+        PictureComment = Parse.Object.extend("PictureComment");
+        query = new Parse.Query(PictureComment);
+        query.equalTo("picture", picture);
+
+        return query.find();
+    }
+
     return {
         getObjectById: getObjectById,
         getObjectsByName: getObjectsByName,
@@ -142,6 +152,10 @@ var Queries = (function () {
         getCommentsByAlbum: getCommentsByAlbum,
         updateObjectArrayField: updateObjectArrayField,
         getLastSaveObject: getLastSaveObject,
+<<<<<<< HEAD
+        getCommentsByPicture: getCommentsByPicture
+=======
+>>>>>>> cfb07b0cd330e218c233488167248839a8cb7b2b
     }
 }());
 
