@@ -53,49 +53,48 @@ var Queries = (function () {
       filter is optional. Filter is array of two [a]
       sort is optional. sort is array of two parameters {sort : asceding/desending,id: id}
     */
-    function getObjectAndPointer(object, pointer, callback, filter, sort) {
-        var arr = [];
-        var unique = [];
+    function getObjectAndPointer(Album, Picture, callback, filter, sort) {
 
-        object = object.toLowerCase();
+        var Album = Parse.Object.extend(Album);
+        var queryAlbum = new Parse.Query(Album);
 
-        var pointerObj = Parse.Object.extend(pointer);
-        pointer = pointer.toLowerCase();
+        var Picture = Parse.Object.extend(Picture);
+        var queryPicture = new Parse.Query(Picture);
 
-        query = new Parse.Query(pointerObj);
-        query.include(object)
-          .find({
-              success: function (data) {
-                  for (var i = 0; i < data.length; i++) {
+        queryAlbum.find({
+            success: function (albumsResult) {
+                var albums = {};
+                console.time("q");
+                albumsResult.forEach(function (x) {
+                    var temp = x.toJSON();
+                    temp['picture'] = [];
+                    albums[x.id] = temp;
 
-                      var obj = data[i].get(object).toJSON();
-                      var point = data[i].toJSON();
+                });
+                queryPicture.find({
+                    success: function (pictureResults) {
+                        pictureResults.forEach(function (x) {
+                            albums[x.attributes.album.id]['picture'].push(x.toJSON());
+                        });
+                        arr = [];
+                        for (var prop in albums) {
+                            arr.push(albums[prop]);
+                        }
+                        arr.sort(function (x, y) {
+                            var a = typeof (x.rating) !== 'undefined' ? x.rating.reduce(function (pv, cv) { return parseInt(pv) + parseInt(cv); }, 0) / x.rating.length : -1;
+                            var b = typeof (y.rating) !== 'undefined' ? y.rating.reduce(function (pv, cv) { return parseInt(pv) + parseInt(cv); }, 0) / y.rating.length : -1;
 
-                      if (unique.indexOf(obj.objectId) === -1) {
-                          obj[pointer] = [];
-                          obj[pointer].push(point);
-                          arr.push(obj);
-                          unique.push(obj.objectId);
-                      } else {
-                          var result = arr.filter(function (x) {
-                              return x.objectId == point[object].objectId;
-                          });
-                          result[0][pointer].push(point);
-                      }
-                  }
+                            return a - b;
+                        });
 
-                  //http://stackoverflow.com/questions/3762589/fastest-javascript-summation of array
+                        localStorage.albums = JSON.stringify(arr);
+                        callback(arr);
+                        console.timeEnd("q");
+                    }
+                });
+            }
+        })
 
-                  arr.sort(function (x, y) {
-                      return y[sort.id].reduce(function (pv, cv) { return pv + cv; }, 0) / y[sort.id].length - x.rating.reduce(function (pv, cv) { return pv + cv; }, 0) / x.rating.length;
-                  });
-                  callback(arr);
-              },
-
-              error: function () {
-                  console.log("Queries.getObjectAndPointer has error")
-              }
-          });
     }
 
     function updateObjectArrayField(tableName, fieldID, tableRow, addValue, success, error) {
@@ -153,6 +152,10 @@ var Queries = (function () {
         getCommentsByAlbum: getCommentsByAlbum,
         updateObjectArrayField: updateObjectArrayField,
         getLastSaveObject: getLastSaveObject,
+<<<<<<< HEAD
         getCommentsByPicture: getCommentsByPicture
+=======
+>>>>>>> cfb07b0cd330e218c233488167248839a8cb7b2b
     }
 }());
+
