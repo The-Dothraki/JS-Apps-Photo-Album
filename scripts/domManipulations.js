@@ -190,12 +190,31 @@
             }
         });
 
-    };
+    }
+
+    function initSliderElements() {
+        Picture = Parse.Object.extend("Picture");
+        var query = new Parse.Query(Picture);
+        query.find({
+            success: function (results) {
+                var sortedPictures = Actions.sortPicturesByRating(results);
+                console.log("HERE IS WHERE IT SHOULD BE ATTACHED TO DOM");
+                sortedPictures.splice(10, sortedPictures.length-10);
+                sortedPictures.forEach(function (picture) {
+                    var url = picture.attributes.file._url;
+                    $("#carousel").append('\n' +
+                        '<li class="slider-element"><div><img src="'+url+'" /></div></li>')
+                });
+                console.log(sortedPictures);
+            }
+        })
+    }
 
     return {
         listAlbums: listAllAlbums,
         openAnAlbum: openAnAlbum,
         listCategotes: listCategotes,
-        averageOfArray: averageOfArray
+        averageOfArray: averageOfArray,
+        initSliderElements: initSliderElements
     }
 })();

@@ -33,6 +33,15 @@ var Queries = (function () {
         return query.find();
     }
 
+    function getAllPictures() {
+        resultsQuery = undefined;
+
+        Picture = Parse.Object.extend("Picture");
+        query = new Parse.Query(Picture);
+
+        return query.find();
+    }
+
     function getCommentsByAlbum(album) {
         resultsQuery = undefined;
 
@@ -138,6 +147,7 @@ var Queries = (function () {
         getObjectById: getObjectById,
         getObjectsByName: getObjectsByName,
         getPicturesByAlbum: getPicturesByAlbum,
+        getAllPictures: getAllPictures,
         getObjectAndPointer: getObjectAndPointer,
         getCommentsByAlbum: getCommentsByAlbum,
         updateObjectArrayField: updateObjectArrayField,

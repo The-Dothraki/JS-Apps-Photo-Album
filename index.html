@@ -7,10 +7,10 @@
 	<meta name="viewport" content="width=device-width">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,300' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/slider.css">
 	<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.3.1.min.js"></script>
     <script type="text/javascript" src="jquery/jquery-1.11.1.min.js"></script>
 </head>
-
 <body>
 <div id="container">
     <header id="main-header">
@@ -52,7 +52,15 @@
             <!-- ------------------------------- -->
             <!-- ----- ALL ALBUMS ARE HERE ----- -->
             <!-- ------------------------------- -->
-
+            <div class="slider-wrapper">
+                <div id="slider" class="slider-carousel">
+                    <ul id="carousel" class="carousel-list">
+                        <!--ADDED DYNAMICALY-->
+                    </ul>
+                </div>
+                <div class="slider-prev" onclick="Actions.sliderPrev()"></div>
+                <div class="slider-next" onclick="Actions.sliderNext()"></div>
+            </div>
             <ul id="album-list">
 
             </ul>
@@ -67,7 +75,7 @@
         <div class="bodysize-close-popup" onclick="closePopup()"></div>
         <div id="popup-picture-container">
             <section id="popup-picture-image-container">
-                <img src="images/test1.jpg" id="pic-shown">
+                <img src="images/etv.JPG" id="pic-shown">
             </section>
             <section id="popup-picture-comment-container">
                 <section id="pic-all-comments">
