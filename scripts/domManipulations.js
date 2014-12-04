@@ -98,7 +98,6 @@
                     header.append(h3);
 
                     section.append(img)
-                        .append($('<div>').attr('class', 'pic-hover').attr('onclick', 'loadPopup()'));
                         .append($('<div>')
                             .attr('class', 'pic-hover')
                             .attr('data-id', picId)
@@ -259,12 +258,8 @@
         listAlbums: listAllAlbums,
         openAnAlbum: openAnAlbum,
         listCategotes: listCategotes,
-<<<<<<< HEAD
         averageOfArray: averageOfArray,
-        initSliderElements: initSliderElements
-=======
-        loadPicturePopup: loadPicturePopup,
-        averageOfArray: averageOfArray
->>>>>>> d47f1751945a2738324167a17c4600adf4719fd9
+        initSliderElements: initSliderElements,
+        loadPicturePopup: loadPicturePopup
     }
 })();
