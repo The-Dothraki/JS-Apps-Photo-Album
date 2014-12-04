@@ -648,7 +648,7 @@ article#album-comment-article {
     color: #000000;
     opacity: 0.9;
 }
-.pic-download:hover {
+.pic-download:hover,.pic-rating:hover {
     cursor: pointer;
     opacity: 0.7;
 }
@@ -887,11 +887,11 @@ input[type="text"], #popup-add-album select {
 /*RATE PICTURE AND ALBUM*/
 
 #popup-rate-picture > .standard-popup .rate-scale, #popup-rate-album > .standard-popup .rate-scale {
-    width: 48px;
+    width: 53px;
     margin: auto;
     height: 100px;
     background-color: rgba(0,0,0,0);
-    display: inline-block;
+    display: inline-block;pic-download
 }
 
 /*Input Range Style*/
