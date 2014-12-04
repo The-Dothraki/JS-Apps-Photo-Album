@@ -281,4 +281,5 @@ document.getElementById("rate-picture-submit").addEventListener("click", ratePic
 
 $('#image-file').change(function () {
     $('#max-file-size').css('color', 'black');
+    $('#allowed-file-types').css('color', 'black');
 });
