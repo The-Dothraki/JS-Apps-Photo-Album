@@ -105,7 +105,7 @@ function addCommentToPicture(event) {
         commentInput = document.getElementById("comment-value"),
         author = authorInput.value,
         comment = commentInput.value;
-        openedImageId = $("#pic-shown").attr("data-id");
+    openedImageId = $("#pic-shown").attr("data-id");
 
     Queries.getObjectById("Picture", openedImageId).then(function (picture) {
         Actions.addCommentToPicture(author, comment, picture);
@@ -171,6 +171,11 @@ function collapseAlbum() {
     $('#album-opened-container ul').remove();
     $('#album-opened-container h2').remove();
     $('#popup-album-comment-container').remove();
+    $('#filters-rating-picture').hide();
+    $('#filters-rating-picture').val("Rating (ascending)");
+    $('#filters-rating').show();
+    $('#filters-category').show();
+    $('#bc').html("<span>Filters: </span>");
 }
 
 function loadPopup(that) {
@@ -254,13 +259,164 @@ $(document).ready(function () {
             document.getElementById("main").style.marginTop = "80px";
         }
     });
-    $(document).on("click", ".pic-hover", function() {
+    $(document).on("click", ".pic-hover", function () {
         loadPopup($(this));
     });
-    $(document).on("click", ".slider-element", function() {
+    $(document).on("click", ".slider-element", function () {
         loadPopup($(this));
     });
 });
+
+
+function attachEventes() {
+    document.getElementById("add-album-submit").addEventListener("click", createAlbum);
+    document.getElementById("add-picture-submit").addEventListener("click", addPictureToAlbum);
+    document.getElementById("rate-album-submit").addEventListener("click", rateAlbum);
+
+    document.getElementById("rate-picture-submit").addEventListener("click", ratePicture);
+    document.getElementById("add-picture-comment-button").addEventListener("click", addCommentToPicture);
+
+    document.getElementById("rate-picture-submit").addEventListener("click", ratePicture);
+
+    $('#filters-category').change(function (data) {
+        var selected;
+        var albumList = $('#album-list').children();
+
+
+        $("#filters-category option:selected").each(function () {
+            selected = $(this).val();
+        });
+
+        if (selected !== 'all') {
+            albumList.show();
+            albumList.each(function (number, element) {
+                if ($(element).data('container') !== selected) {
+                    $(element).hide();
+                }
+            });
+        } else {
+            albumList.show();
+        }
+    });
+
+    $('#filters-rating').change(function (data) {
+        var selected;
+        var albumList = $('#album-list').children();
+
+        $("#filters-rating option:selected").each(function () {
+            selected = $(this).val();
+        });
+
+        switch (selected) {
+            case 'Rating (ascending)':
+                albumList.sort(sortByRatingAsc);
+                albumList.each(function (x, element) {
+                    $('#album-list').append(element);
+                });
+                break;
+            case 'Rating (descending)':
+                albumList.sort(sortByRatingDes);
+                albumList.each(function (x, element) {
+                    $('#album-list').append(element);
+                });
+                break;
+            case 'Date (ascending)':
+                albumList.sort(sortByDateAsc);
+                albumList.each(function (x, element) {
+                    $('#album-list').append(element);
+                });
+                break;
+            case 'Date (descending)':
+                albumList.sort(sortByDateDes);
+                albumList.each(function (x, element) {
+                    $('#album-list').append(element);
+                });
+                break;
+
+            default:
+                break;
+        }
+    });
+
+    $('#filters-rating-picture').change(function (data) {
+        var selected;
+        var pictureList = $('#album-images-container').children();
+
+        $("#filters-rating-picture option:selected").each(function () {
+            selected = $(this).val();
+        });
+
+        switch (selected) {
+            case 'Rating (ascending)':
+                pictureList.sort(sortByRatingAsc);
+                pictureList.each(function (x, element) {
+                    $('#album-images-container').append(element);
+                });
+                break;
+            case 'Rating (descending)':
+                pictureList.sort(sortByRatingDes);
+                pictureList.each(function (x, element) {
+                    $('#album-images-container').append(element);
+                });
+                break;
+            case 'Date (ascending)':
+                pictureList.sort(sortByDateAsc);
+                pictureList.each(function (x, element) {
+                    $('#album-images-container').append(element);
+                });
+                break;
+            case 'Date (descending)':
+                pictureList.sort(sortByDateDes);
+                pictureList.each(function (x, element) {
+                    $('#album-images-container').append(element);
+                });
+                break;
+
+            default:
+                break;
+        }
+
+        console.log(selected);
+
+    });
+
+    $('#image-file').change(function () {
+        $('#max-file-size').css('color', 'black');
+        $('#allowed-file-types').css('color', 'black');
+    });
+
+    function sortByRatingAsc(x, y) {
+        var a = typeof ($(x).data('rating')) !== 'undefined' ? $(x).data('rating').reduce(function (pv, cv) { return parseInt(pv) + parseInt(cv); }, 0) / $(x).data('rating').length : -1;
+        var b = typeof ($(y).data('rating')) !== 'undefined' ? $(y).data('rating').reduce(function (pv, cv) { return parseInt(pv) + parseInt(cv); }, 0) / $(y).data('rating').length : -1;
+
+        if (a === b) {
+            if ($(x).attr('id') < $(y).attr('id')) {
+                return -1;
+            }
+            if ($(x).attr('id') > $(y).attr('id')) {
+                return 1;
+            }
+        }
+
+        return a - b;
+    }
+    function sortByRatingDes(x, y) {
+        return sortByRatingAsc(y, x);
+    }
+
+    function sortByDateAsc(x, y) {
+        var a = Date.parse($(x).data('date'));
+        var b = Date.parse($(y).data('date'));
+
+        return a - b;
+    }
+
+    function sortByDateDes(x, y) {
+        return sortByDateAsc(y, x);
+    }
+}
+
+
 
 $(function () {
     console.time("start");
@@ -268,18 +424,6 @@ $(function () {
     Dom.listCategotes();
     Dom.openAnAlbum();
     Dom.initSliderElements();
-});
+    attachEventes();
 
-document.getElementById("add-album-submit").addEventListener("click", createAlbum);
-document.getElementById("add-picture-submit").addEventListener("click", addPictureToAlbum);
-document.getElementById("rate-album-submit").addEventListener("click", rateAlbum);
-
-document.getElementById("rate-picture-submit").addEventListener("click", ratePicture);
-document.getElementById("add-picture-comment-button").addEventListener("click", addCommentToPicture);
-
-document.getElementById("rate-picture-submit").addEventListener("click", ratePicture);
-
-$('#image-file').change(function () {
-    $('#max-file-size').css('color', 'black');
-    $('#allowed-file-types').css('color', 'black');
 });

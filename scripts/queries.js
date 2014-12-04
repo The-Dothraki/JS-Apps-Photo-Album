@@ -93,6 +93,16 @@ var Queries = (function () {
                             var a = typeof (x.rating) !== 'undefined' ? x.rating.reduce(function (pv, cv) { return parseInt(pv) + parseInt(cv); }, 0) / x.rating.length : -1;
                             var b = typeof (y.rating) !== 'undefined' ? y.rating.reduce(function (pv, cv) { return parseInt(pv) + parseInt(cv); }, 0) / y.rating.length : -1;
 
+                            if (a === b) {
+                                if (x.objectId < y.objectId) {
+                                    return -1;
+                                }
+
+                                if (x.objectId > y.objectId) {
+                                    return 1;
+                                }
+                            }
+
                             return a - b;
                         });
 
@@ -139,6 +149,7 @@ var Queries = (function () {
                 var arr = [];
                 arr.push(result.toJSON());
                 callback(arr);
+
             }
         })
     }
