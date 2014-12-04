@@ -6,16 +6,10 @@ var Actions = (function () {
         sliderMargin = 0;
 
     function uploadPicture(name) {
-        var fileUploadControl = document.getElementById("image-file");
+        var file = validateFile('#image-file');
+        var parseFile = new Parse.File(name, file);
 
-        if (fileUploadControl.files.length > 0) {
-            var file = fileUploadControl.files[0];
-            var parseFile = new Parse.File(name, file);
-
-            return parseFile;
-        } else {
-            throw new Error('Couldn\'t upload the picture!');
-        }
+        return parseFile;
     }
 
     function addPictureToAlbum(name, file, album) {
@@ -134,6 +128,34 @@ var Actions = (function () {
             sliderMargin = 0;
         }
         document.getElementById('carousel').style.marginLeft = "-"+sliderMargin+"px";
+    }
+
+    function validateFile(inputId) {
+        var fileUploadControl = $(inputId);
+        var maxSize = fileUploadControl.data('max-size');
+
+        if (fileUploadControl.get(0).files.length) {
+            var fileSize = fileUploadControl.get(0).files[0].size / 1024;
+            var file = fileUploadControl.get(0).files[0];
+
+            if(fileSize <= maxSize) {
+
+                var res_field = file.name;
+                var extension = res_field.substr(res_field.lastIndexOf('.') + 1).toLowerCase();
+                var allowedExtensions = ['jpg', 'jpeg', 'bmp', 'gif', 'png'];
+
+                if (allowedExtensions.indexOf(extension) !== -1)
+                {
+                    return file;
+                } else {
+                    throw new Error('Invalid file format.');
+                }
+            } else {
+                throw new Error('File size is more then ' + maxSize + ' KB');
+            }
+        } else {
+            throw new Error('Couldn\'t upload the picture!');
+        }
     }
 
     return {

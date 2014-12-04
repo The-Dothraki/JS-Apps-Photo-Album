@@ -10,10 +10,7 @@ function addPictureToAlbum(event) {
 
         Queries.getObjectById("Album", albumId).then(function (album) {
             Actions.addPictureToAlbum(validPicName, picFile, album);
-        }).then(function (result) {
-            closePopup();
-            alert('The picture was successfully added to the album "' + openedAlbum.innerHTML + '".');
-        });
+        }).then(closePopup());
     } catch (error) {
         alert(error.message);
     }
