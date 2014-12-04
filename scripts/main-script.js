@@ -12,7 +12,7 @@ function addPictureToAlbum(event) {
             Actions.addPictureToAlbum(validPicName, picFile, album);
         }).then(closePopup());
     } catch (error) {
-        alert(error.message);
+        // maybe log the error..
     }
 }
 
@@ -279,3 +279,6 @@ document.getElementById("add-picture-comment-button").addEventListener("click", 
 
 document.getElementById("rate-picture-submit").addEventListener("click", ratePicture);
 
+$('#image-file').change(function () {
+    $('#max-file-size').css('color', 'black');
+});
