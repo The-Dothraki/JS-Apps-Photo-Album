@@ -210,22 +210,17 @@ function setSize() {
 
     var aspectRatio = (pictureWidth) / (pictureHeight);
 
-    console.log(widthContainer + " " + heightContainer + " " + pictureWidth + " " + pictureHeight);
+    document.getElementById("pic-all-comments").style.height = (heightContainer - 260).toString() + 'px';
     document.getElementById("popup-picture-image-container").style.width = (widthContainer - 380).toString() + 'px';
     document.getElementById("popup-picture-image-container").style.height = heightContainer.toString() + 'px';
+    //if horizontal
     if ((widthContainer - 380) / heightContainer > aspectRatio) {
         document.getElementById("pic-shown").style.maxHeight = '100%';
+        document.getElementById("pic-shown").style.maxWidth = 'auto';
     } else {
         document.getElementById("pic-shown").style.maxWidth = '100%';
+        document.getElementById("pic-shown").style.maxHeight = 'auto';
     }
-
-    if (aspectRatio >= 1) {
-        var paddingTop = Math.abs((heightContainer - ((widthContainer - 380) / aspectRatio)) / 2).toString() + 'px';
-        console.log(paddingTop);
-        document.getElementById("popup-picture-image-container").style.paddingTop = paddingTop;
-    }
-
-    document.getElementById("pic-all-comments").style.height = (heightContainer - 260).toString() + 'px';
 }
 
 function loadAddAlbum() {
@@ -265,7 +260,10 @@ $(document).ready(function () {
     $(document).on("click", ".pic-hover", function() {
         loadPopup($(this));
     });
-})
+    $(document).on("click", ".slider-element", function() {
+        loadPopup($(this));
+    });
+});
 
 $(function () {
     console.time("start");

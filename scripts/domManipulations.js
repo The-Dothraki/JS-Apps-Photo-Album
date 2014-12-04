@@ -196,8 +196,9 @@
                 sortedPictures.splice(10, sortedPictures.length-10);
                 sortedPictures.forEach(function (picture) {
                     var url = picture.attributes.file._url;
+                    var id = picture.id;
                     $("#carousel").append('\n' +
-                        '<li class="slider-element"><div><img src="'+url+'" /></div></li>')
+                        '<li class="slider-element" data-id="'+id+'" data-src="'+url+'"><div><img src="'+url+'" /></div></li>')
                 });
                 console.log(sortedPictures);
             }
