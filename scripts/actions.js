@@ -139,18 +139,17 @@ var Actions = (function () {
             var file = fileUploadControl.get(0).files[0];
 
             if(fileSize <= maxSize) {
-
                 var res_field = file.name;
                 var extension = res_field.substr(res_field.lastIndexOf('.') + 1).toLowerCase();
                 var allowedExtensions = ['jpg', 'jpeg', 'bmp', 'gif', 'png'];
 
-                if (allowedExtensions.indexOf(extension) !== -1)
-                {
+                if (allowedExtensions.indexOf(extension) !== -1) {
                     return file;
                 } else {
                     throw new Error('Invalid file format.');
                 }
             } else {
+                $('#max-file-size').css('color', 'red');
                 throw new Error('File size is more then ' + maxSize + ' KB');
             }
         } else {
