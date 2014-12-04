@@ -11,7 +11,12 @@
             var ul = $('<ul>');
             var displayedPictureCount = 0;
 
-            li.attr('id', album.objectId).attr('title', album.name).attr('data-container', album.category.objectId).attr('class', 'album').attr('onclick', 'openAlbum()');
+            li.attr('id', album.objectId)
+                .attr('title', album.name)
+                .data('container', album.category.objectId)
+                .data('rating', album.rating)
+                .data('date', album.createdAt)
+                .attr('class', 'album').attr('onclick', 'openAlbum()');
 
             //h3
             h.attr('class', 'album-title').text(album.name);
@@ -45,7 +50,7 @@
             li.append(h)
                 .append(div)
                 .append(footer);
-            mainContainer.append(li);           
+            mainContainer.append(li);
         });
         console.timeEnd("start");
         console.timeEnd("123");
@@ -62,6 +67,12 @@
             var albumName = this.title;
             var albumID = this.id;
 
+            $('#filters-category').hide();
+            $('#filters-rating').hide();
+            $('#filters-rating-picture').show();
+            $('#bc').html("<span>Sort: </span>");
+
+
             div.attr('id', 'back-button').attr('onclick', 'collapseAlbum()')
                .attr('class', 'back-button-change').attr('style', 'display: block;');
 
@@ -72,14 +83,31 @@
             var album = new Album();
             album.id = albumID;
 
-            Queries.getPicturesByAlbum(album).then(function (album) {
-                for (var i = 0; i < album.length; i++) {
-                    var url = album[i].attributes.file._url;
-                    var picName = album[i].attributes.name;
-                    var picDate = "Date: " + formatDate(album[i].createdAt);
-                    var picRating = typeof (album[i]._serverData.rating) == "undefined" ? "Rate me" :
-                        "Rating: " + averageOfArray(album[i]._serverData.rating).toFixed(0) + " / 10";
-                    var picId = album[i].id;
+            Queries.getPicturesByAlbum(album).then(function (picture) {
+                picture.sort(function (x, y) {
+                    var a = typeof (x._serverData.rating) !== 'undefined' ? x._serverData.rating.reduce(function (pv, cv) { return parseInt(pv) + parseInt(cv); }, 0) / x._serverData.rating.length : -1;
+                    var b = typeof (y._serverData.rating) !== 'undefined' ? y._serverData.rating.reduce(function (pv, cv) { return parseInt(pv) + parseInt(cv); }, 0) / y._serverData.rating.length : -1;
+
+                    if (a === b) {
+                        if (x.objectId < y.objectId) {
+                            return -1;
+                        }
+
+                        if (x.objectId > y.objectId) {
+                            return 1;
+                        }
+                    }
+
+                    return a - b;
+                })
+
+                for (var i = 0; i < picture.length; i++) {
+                    var url = picture[i].attributes.file._url;
+                    var picName = picture[i].attributes.name;
+                    var picDate = "Date: " + formatDate(picture[i].createdAt);
+                    var picRating = typeof (picture[i]._serverData.rating) == "undefined" ? "Rate me" :
+                        "Rating: " + averageOfArray(picture[i]._serverData.rating).toFixed(0) + " / 10";
+                    var picId = picture[i].id;
 
 
 
@@ -107,7 +135,12 @@
                         .append($('<section>').attr('class', 'pic-download').append(a))
                         .append($('<section>').attr('id', picId).attr('class', 'pic-rating').text(picRating));
 
-                    ul.append(($('<li>').append(header).append(section).append(footer)));
+
+                    var li = $('<li>');
+                    li.data('rating', picture[i]._serverData.rating);
+                    li.data('date', picture[i].createdAt);
+
+                    ul.append(li.append(header).append(section).append(footer));
                 };
             });
 
@@ -193,12 +226,12 @@
             success: function (results) {
                 var sortedPictures = Actions.sortPicturesByRating(results);
                 console.log("HERE IS WHERE IT SHOULD BE ATTACHED TO DOM");
-                sortedPictures.splice(10, sortedPictures.length-10);
+                sortedPictures.splice(10, sortedPictures.length - 10);
                 sortedPictures.forEach(function (picture) {
                     var url = picture.attributes.file._url;
                     var id = picture.id;
                     $("#carousel").append('\n' +
-                        '<li class="slider-element" data-id="'+id+'" data-src="'+url+'"><div><img src="'+url+'" /></div></li>')
+                        '<li class="slider-element" data-id="' + id + '" data-src="' + url + '"><div><img src="' + url + '" /></div></li>')
                 });
                 console.log(sortedPictures);
             }
@@ -216,9 +249,9 @@
             .attr("data-id", picId);
 
         Queries.getObjectById("Picture", picId)
-            .then(function(pic) {
+            .then(function (pic) {
                 Queries.getCommentsByPicture(pic)
-                    .then(function(comments) {
+                    .then(function (comments) {
 
                         var li,
                             header,
