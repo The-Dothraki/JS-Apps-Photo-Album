@@ -7,6 +7,10 @@ var Actions = (function () {
 
     function uploadPicture(name) {
         var file = validateFile('#image-file');
+        var extension = getFileExtension(file.name);
+        name += '.' + extension;
+        file.name = name;
+
         var parseFile = new Parse.File(name, file);
 
         return parseFile;
@@ -130,7 +134,13 @@ var Actions = (function () {
         document.getElementById('carousel').style.marginLeft = "-"+sliderMargin+"px";
     }
 
-    function validateFile(inputId) {
+    function getFileExtension (fileName) {
+        var extension = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+
+        return extension;
+    }
+
+    function validateFile (inputId) {
         var fileUploadControl = $(inputId);
         var maxSize = fileUploadControl.data('max-size');
 
@@ -139,8 +149,8 @@ var Actions = (function () {
             var file = fileUploadControl.get(0).files[0];
 
             if(fileSize <= maxSize) {
-                var res_field = file.name;
-                var extension = res_field.substr(res_field.lastIndexOf('.') + 1).toLowerCase();
+                var fileName = file.name;
+                var extension = getFileExtension(fileName);
                 var allowedExtensions = ['jpg', 'jpeg', 'bmp', 'gif', 'png'];
 
                 if (allowedExtensions.indexOf(extension) !== -1) {
