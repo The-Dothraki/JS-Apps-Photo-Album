@@ -66,11 +66,10 @@ function rateAlbum() {
     var albumId = openedAlbum.getAttribute('class');
     var rating = document.getElementById("rate-album-range").value;
     Actions.rateAlbum(albumId, parseInt(rating),
-             function succes() {
+             function success() {
                  alert('The album was successfully rated with ' + rating + ' !');
                  closePopup();
-                 document.getElementById("rate-album-range").value = 0;
-                 document.getElementById("rate-album-value").innerHTML = "Rate: " + 0;
+                 showVal(0, 'rate-album-value');
                  var album = (JSON.parse(localStorage.albums).filter(function (x) {
                      return x.objectId == albumId;
                  }));
@@ -92,8 +91,7 @@ function ratePicture(event) {
              function succes() {
                  alert('The picture was successfully rated with ' + rating + ' !');
                  closePopup();
-                 document.getElementById("rate-picture-range").value = 0;
-                 document.getElementById("rate-picture-value").innerHTML = "Rate: " + 0;
+                 showVal(0, 'rate-picture-value');
              }, function error(error) {
                  alert(error);
              });
@@ -195,6 +193,10 @@ function closePopup() {
     document.getElementById("popup-add-picture").style.display = "none";
     document.getElementById("popup-rate-album").style.display = "none";
     document.getElementById("popup-rate-picture").style.display = "none";
+    showVal(0, 'rate-picture-value');
+    showVal(0, 'rate-album-value');
+    document.getElementById('rate-album-range').value = 0;
+    document.getElementById('rate-picture-range').value = 0;
 }
 
 function setSize() {
@@ -245,6 +247,19 @@ function loadRatePicture() {
 function showVal(newVal, id) {
     id = id.toString().replace('range', 'value');
     document.getElementById(id).innerHTML = "Rate: " + newVal;
+
+    var parentId = id.split('-')[1];
+
+    var divs = $('#' + 'popup-rate-' + parentId + ' .rate-scale')
+    $(divs[0]).css('height', '100px');
+    $(divs[0]).css('background-color', "rgba(0,0,0,0)");
+
+    for (var i = newVal; i < divs.length; i++) {
+        $(divs[i]).css('height', '100px');
+        $(divs[i]).css('background-color', "rgba(0,0,0,0)");
+    }
+    $(divs[parseInt(newVal)]).css('background-color', "rgba(0,0,0," + newVal / 10 + ")");
+    $(divs[parseInt(newVal)]).css('height', newVal * 10 + "px");
 }
 
 $(document).ready(function () {
