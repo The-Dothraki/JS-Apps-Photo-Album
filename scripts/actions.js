@@ -145,7 +145,8 @@ var Actions = (function () {
 
                 if (allowedExtensions.indexOf(extension) !== -1) {
                     return file;
-                } else {
+                } else {                    
+                    $('#allowed-file-types').css('color', 'red');
                     throw new Error('Invalid file format.');
                 }
             } else {
