@@ -184,7 +184,25 @@
             }
         });
 
-    };
+    }
+
+    function initSliderElements() {
+        Picture = Parse.Object.extend("Picture");
+        var query = new Parse.Query(Picture);
+        query.find({
+            success: function (results) {
+                var sortedPictures = Actions.sortPicturesByRating(results);
+                console.log("HERE IS WHERE IT SHOULD BE ATTACHED TO DOM");
+                sortedPictures.splice(10, sortedPictures.length-10);
+                sortedPictures.forEach(function (picture) {
+                    var url = picture.attributes.file._url;
+                    $("#carousel").append('\n' +
+                        '<li class="slider-element"><div><img src="'+url+'" /></div></li>')
+                });
+                console.log(sortedPictures);
+            }
+        })
+    }
 
     function loadPicturePopup(pic) {
         var picId = pic.attr("data-id"),
@@ -240,7 +258,8 @@
         listAlbums: listAllAlbums,
         openAnAlbum: openAnAlbum,
         listCategotes: listCategotes,
-        loadPicturePopup: loadPicturePopup,
-        averageOfArray: averageOfArray
+        averageOfArray: averageOfArray,
+        initSliderElements: initSliderElements,
+        loadPicturePopup: loadPicturePopup
     }
 })();

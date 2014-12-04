@@ -2,7 +2,8 @@ var Actions = (function () {
     var Picture = Parse.Object.extend("Picture"),
         Category = Parse.Object.extend("Category"),
         Album = Parse.Object.extend("Album"),
-        Comment = Parse.Object.extend("Comment");
+        Comment = Parse.Object.extend("Comment"),
+        sliderMargin = 0;
 
     function uploadPicture(name) {
         var fileUploadControl = document.getElementById("image-file");
@@ -85,6 +86,56 @@ var Actions = (function () {
 
     }
 
+    function sortPicturesByRating(picturesArray) {
+        var fElement;
+        var sElement;
+        for (var i = 0; i < picturesArray.length; i++) {
+            if (picturesArray[i].attributes.rating == undefined) {
+                picturesArray.splice(i, 1);
+                i--;
+            }
+        }
+        for (i = 0; i < picturesArray.length-1; i++) {
+            fElement = getNumAverage(picturesArray[i].attributes.rating);
+            sElement = getNumAverage(picturesArray[i+1].attributes.rating);
+            if (sElement > fElement) {
+                var _tempSwap = picturesArray[i];
+                picturesArray[i] = picturesArray[i+1];
+                picturesArray[i+1] = _tempSwap;
+                i = -1;
+            }
+        }
+        return picturesArray;
+    }
+
+    function getNumAverage(arr) {
+        var sum = 0;
+        for (var i = 0; i < arr.length; i++){
+            sum += parseInt(arr[i], 10);
+        }
+        return parseInt(sum / arr.length);
+    }
+
+    function sliderNext() {
+        if (sliderMargin <= 750) {
+            sliderMargin += 150;
+        }
+        else if (sliderMargin >= 750 && sliderMargin < 900) {
+            sliderMargin = 900;
+        }
+        document.getElementById('carousel').style.marginLeft = "-"+sliderMargin+"px";
+    }
+
+    function sliderPrev() {
+        if (sliderMargin >= 150) {
+            sliderMargin -= 150;
+        }
+        else if (sliderMargin >= 0 && sliderMargin < 150) {
+            sliderMargin = 0;
+        }
+        document.getElementById('carousel').style.marginLeft = "-"+sliderMargin+"px";
+    }
+
     return {
         uploadPicture: uploadPicture,
         addPictureToAlbum: addPictureToAlbum,
@@ -95,5 +146,8 @@ var Actions = (function () {
         ratePicture: ratePicture,
         rateAlbum: rateAlbum,
         listAlbums: listAlbums,
+        sortPicturesByRating: sortPicturesByRating,
+        sliderNext: sliderNext,
+        sliderPrev: sliderPrev
     }
 }());

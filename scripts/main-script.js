@@ -272,6 +272,7 @@ $(function () {
     Actions.listAlbums();
     Dom.listCategotes();
     Dom.openAnAlbum();
+    Dom.initSliderElements();
 });
 
 document.getElementById("add-album-submit").addEventListener("click", createAlbum);
