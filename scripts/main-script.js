@@ -75,14 +75,10 @@ function rateAlbum() {
              function success() {
                  alert('The album was successfully rated with ' + rating + ' !');
                  closePopup();
-                 showVal(1, 'rate-album-value');
-                 var album = (JSON.parse(localStorage.albums).filter(function (x) {
-                     return x.objectId == albumId;
-                 }));
-                 var albumRating = typeof (album[0].rating) === 'undefined' ? rating : Dom.averageOfArray([0].rating);
-
-                 var albumRatingSection = $('li#' + albumId + ' footer section.alb-rating-f').text(albumRating + '/10');
-                 console.log(album);
+                 emptyFields();
+                 var albumElement = $('#' + albumId);
+                 var changeElement = $(albumElement.first().children().eq(2)[0]).children()[1];
+                 Dom.changeRating(albumElement, changeElement, rating, "");
 
              }, function error(error) {
                  alert(error);
@@ -90,14 +86,20 @@ function rateAlbum() {
 }
 
 function ratePicture(event) {
-    var pictureID = $('#popup-rate-picture form').attr('id');
+    var pictureId = $('#popup-rate-picture form').attr('id');
     var rating = document.getElementById("rate-picture-range").value;
 
-    Actions.ratePicture(pictureID, parseInt(rating),
-             function succes() {
+    Actions.ratePicture(pictureId, parseInt(rating),
+             function success() {
                  alert('The picture was successfully rated with ' + rating + ' !');
+                 var picture = $('#album-images-container').children().map(function (li) {
+                     $(li).data('id') == pictureId;
+                 }).prevObject[0];
+
+                 var changeElement = $('#' + pictureId)[0];
+
+                 Dom.changeRating(picture, changeElement, rating, "Rating: ");
                  closePopup();
-                 showVal(1, 'rate-picture-value');
              }, function error(error) {
                  alert(error);
              });
@@ -197,8 +199,8 @@ function emptyFields() {
     document.getElementById('rate-picture-range').value = 1;
     document.getElementById("album-name").value = "";
     document.getElementById("picture-name").value = "";
-    document.getElementById("image-file").value = "";   
-   
+    document.getElementById("image-file").value = "";
+
 }
 
 function closePopup() {
@@ -208,7 +210,7 @@ function closePopup() {
     document.getElementById("popup-rate-album").style.display = "none";
     document.getElementById("popup-rate-picture").style.display = "none";
     emptyFields();
-    
+
 }
 
 function setSize() {
@@ -270,8 +272,11 @@ function showVal(newVal, id) {
         $(divs[i]).css('height', '100px');
         $(divs[i]).css('background-color', "rgba(0,0,0,0)");
     }
-    $(divs[parseInt(newVal - 1)]).css('background-color', "rgba(0,0,0," + (newVal - 1) / 10 + ")");
-    $(divs[parseInt(newVal - 1)]).css('height', newVal * 10 + "px");
+
+    for (var i = 1; i < newVal; i++) {
+        $(divs[parseInt(i)]).css('background-color', "rgba(0,0,0," + i / 10 + ")");
+        $(divs[parseInt(i)]).css('height', i * 10 + "px");
+    }  
 }
 
 $(document).ready(function () {
@@ -299,11 +304,10 @@ function attachEventes() {
     document.getElementById("add-album-submit").addEventListener("click", createAlbum);
     document.getElementById("add-picture-submit").addEventListener("click", addPictureToAlbum);
     document.getElementById("rate-album-submit").addEventListener("click", rateAlbum);
-
     document.getElementById("rate-picture-submit").addEventListener("click", ratePicture);
     document.getElementById("add-picture-comment-button").addEventListener("click", addCommentToPicture);
 
-    document.getElementById("rate-picture-submit").addEventListener("click", ratePicture);
+
 
     $('#filters-category').change(function (data) {
         var selected;
@@ -453,8 +457,6 @@ $(function () {
     console.time("start");
     Actions.listAlbums();
     Dom.listCategotes();
-    // Dom.openAnAlbum();
     Dom.initSliderElements();
     attachEventes();
-
 });

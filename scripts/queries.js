@@ -58,11 +58,9 @@ var Queries = (function () {
 
     /* object, pointedObject are names of tables,
       example : object is album and pointer is picture
-      execute callback with parameter JSON object
-      filter is optional. Filter is array of two [a]
-      sort is optional. sort is array of two parameters {sort : asceding/desending,id: id}
+      execute callback with parameter JSON object      
     */
-    function getObjectAndPointer(Album, Picture, callback, filter, sort) {
+    function getObjectAndPointer(Album, Picture, callback) {
 
         var Album = Parse.Object.extend(Album);
         var queryAlbum = new Parse.Query(Album);
@@ -105,8 +103,6 @@ var Queries = (function () {
 
                             return a - b;
                         });
-
-                        localStorage.albums = JSON.stringify(arr);
                         callback(arr);
                         console.timeEnd("q");
                     }
