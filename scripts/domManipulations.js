@@ -240,10 +240,8 @@
 
     function loadPicturePopup(pic) {
         var picId = pic.attr("data-id"),
-            picSrc = pic.attr("data-src"),
-            ul = $("#pic-comments-list");
+            picSrc = pic.attr("data-src");
 
-        ul.html("");
         $("#pic-shown")
             .attr("src", picSrc)
             .attr("data-id", picId);
@@ -252,30 +250,34 @@
             .then(function (pic) {
                 Queries.getCommentsByPicture(pic)
                     .then(function (comments) {
-
-                        var li,
-                            header,
-                            authorSpan,
-                            dateSpan,
-                            author,
-                            content,
-                            date,
-                            i;
-
-                        for (i in comments) {
-                            author = comments[i].attributes.author;
-                            content = comments[i].attributes.commentContent;
-                            date = formatDate(comments[i].createdAt);
-                            li = $("<li>");
-                            header = $("<header>")
-                                    .append($("<span>").text(author))
-                                    .append($("<span>").text(date));
-                            li.append(header)
-                                .append($("<article>").append(content));
-                            ul.append(li);
-                        }
+                        loadPictureComments(comments);
                     });
             });
+    }
+
+    function loadPictureComments(comments) {
+        var ul = $("#pic-comments-list"),
+            li,
+            header,
+            author,
+            content,
+            date,
+            i;
+
+        ul.html("");
+
+        for (i in comments) {
+            author = comments[i].attributes.author;
+            content = comments[i].attributes.commentContent;
+            date = formatDate(comments[i].createdAt);
+            li = $("<li>");
+            header = $("<header>")
+                .append($("<span>").text(author))
+                .append($("<span>").text(date));
+            li.append(header)
+                .append($("<article>").append(content));
+            ul.append(li);
+        }
     }
 
     function formatDate(obj) {
@@ -294,6 +296,7 @@
         listCategotes: listCategotes,
         averageOfArray: averageOfArray,
         initSliderElements: initSliderElements,
-        loadPicturePopup: loadPicturePopup
+        loadPicturePopup: loadPicturePopup,
+        loadPictureComments: loadPictureComments
     }
 })();

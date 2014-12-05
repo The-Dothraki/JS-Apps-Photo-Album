@@ -102,15 +102,20 @@ function addCommentToPicture(event) {
     var authorInput = document.getElementById("name-for-pic-comment"),
         commentInput = document.getElementById("comment-value"),
         author = authorInput.value,
-        comment = commentInput.value;
+        comment = commentInput.value,
+        pic;
+
     openedImageId = $("#pic-shown").attr("data-id");
 
     Queries.getObjectById("Picture", openedImageId).then(function (picture) {
+        pic = picture;
         Actions.addCommentToPicture(author, comment, picture);
     }).then(function (result) {
-        // TODO: success message and dynamic refresh
-        authorInput.value = "";
-        commentInput.value = "";
+        Queries.getCommentsByPicture(pic).then(function(comments) {
+            Dom.loadPictureComments(comments);
+            authorInput.value = "";
+            commentInput.value = "";
+        });
     });
 }
 
@@ -177,6 +182,7 @@ function collapseAlbum() {
 }
 
 function loadPopup(that) {
+    $("#pic-comments-list").html("");
     document.getElementById("popup-picture").style.display = "block";
     Dom.loadPicturePopup(that);
     setSize();

@@ -1,15 +1,14 @@
 ﻿<!doctype html>
 <html>
 <head>
-	<meta charset="utf-8">
-
-	<title>JS-Apps-Photo-Album</title>
-	<meta name="description" content="Photo Album">
-	<meta name="viewport" content="width=device-width">
+    <meta charset="utf-8">
+    <title>JS-Apps-Photo-Album</title>
+    <meta name="description" content="Photo Album">
+    <meta name="viewport" content="width=device-width">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,300' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/slider.css">
-	<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.3.1.min.js"></script>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.3.1.min.js"></script>
     <script type="text/javascript" src="jquery/jquery-1.11.1.min.js"></script>
 </head>
 <body>
@@ -55,7 +54,6 @@
             </div>
         </section>
         <div id="main-container" class="cf">
-
             <!-- ------------------------------- -->
             <!-- ----- ALL ALBUMS ARE HERE ----- -->
             <!-- ------------------------------- -->
@@ -70,13 +68,10 @@
                 <div class="slider-next" onclick="Actions.sliderNext()"></div>
             </div>
             <ul id="album-list">
-
             </ul>
-
         </div>
         <div id="album-opened-container">
             <div id="back-button" onclick="collapseAlbum()"></div>
-
         </div>
     </div>
     <div id="popup-picture" class="popup">
@@ -101,7 +96,6 @@
                 </section>
             </section>
         </div>
-
     </div>
     <div id="popup-add-album" class="popup">
         <div class="bodysize-close-popup" onclick="closePopup()"></div>
@@ -114,9 +108,7 @@
                 <select id="album-category" class="categories-in-dropdown"></select>
                 <br>
             </form>
-
             <div id="add-album-submit" class="add-buttons">Add album</div>
-
         </div>
     </div>
     <div id="popup-add-picture" class="popup">
@@ -148,8 +140,7 @@
                 <div class="rate-scale"> </div>
                 <div class="rate-scale"> </div>
                 <div class="rate-scale"> </div>
-
-                <label for="rate-album-value" id="rate-album-value">Rate: 1</label>                
+                <label for="rate-album-value" id="rate-album-value">Rate: 1</label>
                 <input type="range" id="rate-album-range" value="1" min="1" max="10" step="1" oninput="showVal(this.value, this.id)">
                 <br>
                 <div id="rate-album-submit" class="add-buttons">Rate Album</div>
@@ -170,11 +161,9 @@
                 <div class="rate-scale"> </div>
                 <div class="rate-scale"> </div>
                 <div class="rate-scale"> </div>
-                <div class="rate-scale"> </div>               
-
-                <label  for="rate-picture-value" id="rate-picture-value">Rate: 1</label>
+                <div class="rate-scale"> </div>
+                <label for="rate-picture-value" id="rate-picture-value">Rate: 1</label>
                 <input type="range" id="rate-picture-range" value="1" min="1" max="10" step="1" oninput="showVal(this.value, this.id)">
-
                 <div id="rate-picture-submit" class="add-buttons">Rate Picture</div>
             </form>
         </div>
@@ -183,15 +172,13 @@
         All rights reserved! Team Dothraki on project Dothstagram! Rekt
     </footer>
 </div>
-
-	<!-- TODO: Use require JS -->
-
-	<script type="text/javascript">
-		Parse.initialize("6bjvgCqdQXoWQGLre6KwR7mmxkCBjF03ClAXLQ6l", "RdajQSeLGu5UDhj8142Kp6xkHIJIatuWuwUifZmW");
-	</script>
-	<script src="scripts/queries.js"></script>
-    <script src="scripts/actions.js"></script>
-    <script src="scripts/domManipulations.js"></script>
-    <script src="scripts/main-script.js"></script>
+<!-- TODO: Use require JS -->
+<script type="text/javascript">
+    Parse.initialize("6bjvgCqdQXoWQGLre6KwR7mmxkCBjF03ClAXLQ6l", "RdajQSeLGu5UDhj8142Kp6xkHIJIatuWuwUifZmW");
+</script>
+<script src="scripts/queries.js"></script>
+<script src="scripts/actions.js"></script>
+<script src="scripts/domManipulations.js"></script>
+<script src="scripts/main-script.js"></script>
 </body>
 </html>
