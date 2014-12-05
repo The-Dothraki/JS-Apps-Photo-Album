@@ -55,13 +55,14 @@ function createAlbum(event) {
                 Actions.createAlbum(albumName, category);
             })
             .then(function (result) {
+                Noty.success("Album created");
                 Queries.getLastSaveObject("Album", function (x) {
                     Dom.listAlbums(x);
                     openAlbum();
                     emptyFields();
                     Dom.openAnAlbum.call($('#' + x[0].objectId)[0]);
+                   
                 });
-                console.log("Album created.");
                 closePopup();
             });
     }
@@ -73,7 +74,7 @@ function rateAlbum() {
     var rating = document.getElementById("rate-album-range").value;
     Actions.rateAlbum(albumId, parseInt(rating),
              function success() {
-                 alert('The album was successfully rated with ' + rating + ' !');
+                 Noty.success('The album was successfully rated with ' + rating + ' !');               
                  closePopup();
                  emptyFields();
                  var albumElement = $('#' + albumId);
@@ -81,7 +82,7 @@ function rateAlbum() {
                  Dom.changeRating(albumElement, changeElement, rating, "");
 
              }, function error(error) {
-                 alert(error);
+                 Noty.error("Sorry, there was a problem");                 
              });
 }
 
@@ -91,7 +92,7 @@ function ratePicture(event) {
 
     Actions.ratePicture(pictureId, parseInt(rating),
              function success() {
-                 alert('The picture was successfully rated with ' + rating + ' !');
+                 Noty.success('The picture was successfully rated with ' + rating + ' !');
                  var picture = $('#album-images-container').children().map(function (li) {
                      $(li).data('id') == pictureId;
                  }).prevObject[0];
@@ -101,7 +102,7 @@ function ratePicture(event) {
                  Dom.changeRating(picture, changeElement, rating, "Rating: ");
                  closePopup();
              }, function error(error) {
-                 alert(error);
+                 Noty.error("Sorry, there was a problem");
              });
 }
 
@@ -459,4 +460,7 @@ $(function () {
     Dom.listCategotes();
     Dom.initSliderElements();
     attachEventes();
+
+   
+
 });
