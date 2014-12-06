@@ -9,8 +9,7 @@
             theme: 'defaultTheme',
             maxVisible: 10,
             timeout: time
-        });
-        console.log('html: ' + n.options.id);
+        });      
     }
 
     function success(text) {
@@ -19,8 +18,7 @@
 
     function error(text) {
         generate('error', text, 2000);
-    }
-
+        }
 
     return {
         success: success,

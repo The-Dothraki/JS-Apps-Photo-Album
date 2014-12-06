@@ -297,7 +297,7 @@
         var ratingArr = $(element).data('rating');
         var newValue = parseInt(value);
 
-        if (ratingArr === undefined) {
+        if (ratingArr == "undefined" || ratingArr == undefined) {
             var arr = [];
             arr.push(newValue);
             $(element).data('rating', arr);
