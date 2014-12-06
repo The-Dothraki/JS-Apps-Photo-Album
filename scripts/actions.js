@@ -77,11 +77,7 @@ var Actions = (function () {
     function listAlbums() {
         Queries.getObjectAndPointer("Album", "Picture", function (result) {
             Dom.listAlbums(result)
-        },
-        null,
-        { id: 'rating' }
-        );
-
+        });
     }
 
     function sortPicturesByRating(picturesArray) {

@@ -1,5 +1,5 @@
 function addPictureToAlbum(event) {
-    var picName = document.getElementById("picture-name").value;
+    var picName = document.getElementById('picture-name').value;
 
     var openedAlbum = document.getElementById('opened-album-title');
     var albumId = openedAlbum.getAttribute('class');
@@ -8,9 +8,18 @@ function addPictureToAlbum(event) {
         var validPicName = validateString(picName, 'Picture name');
         var picFile = Actions.uploadPicture(validPicName);
 
-        Queries.getObjectById("Album", albumId).then(function (album) {
-            Actions.addPictureToAlbum(validPicName, picFile, album);
-        }).then(closePopup());
+        Queries.getObjectById('Album', albumId)
+            .then(function(album) {
+                Actions.addPictureToAlbum(validPicName, picFile, album)
+                    .then(function() {
+                        Queries.getLastSaveObject('Picture', function(pic) {
+                            console.log(pic[0]);
+                            createPictureItem(pic[0]);
+                        });
+
+                        closePopup();
+                    });
+            });
     } catch (error) {
         // maybe log the error..
     }
@@ -26,9 +35,9 @@ function addCommentToAlbum(event) {
     try {
         var validName = validateString(commentOf, 'Name');
 
-        Queries.getObjectById("Album", albumId).then(function (album) {
+        Queries.getObjectById("Album", albumId).then(function(album) {
             Actions.addCommentToAlbum(validName, commentContent, album);
-        }).then(function (result) {
+        }).then(function(result) {
             emptyFields();
             alert('The comment was successfully added."');
         });
@@ -48,14 +57,18 @@ function createAlbum(event) {
         alert("Album name should be between 0 and 25 symbols and should contain only latin letters, numbers, intervals and dashes.");
     } else {
         Queries.getObjectById("Category", categoryId)
-            .then(function (category) {
+            .then(function(category) {
                 Actions.createAlbum(albumName, category);
             })
-            .then(function (result) {
-                Queries.getLastSaveObject("Album", function (x) {
+            .then(function(result) {
+                Noty.success("Album created");
+                Queries.getLastSaveObject("Album", function(x) {
                     Dom.listAlbums(x);
+                    openAlbum();
+                    emptyFields();
+                    Dom.openAnAlbum.call($('#' + x[0].objectId)[0]);
+
                 });
-                console.log("Album created.");
                 closePopup();
             });
     }
@@ -66,35 +79,37 @@ function rateAlbum() {
     var albumId = openedAlbum.getAttribute('class');
     var rating = document.getElementById("rate-album-range").value;
     Actions.rateAlbum(albumId, parseInt(rating),
-             function success() {
-                 alert('The album was successfully rated with ' + rating + ' !');
-                 closePopup();
-                 showVal(1, 'rate-album-value');
-                 var album = (JSON.parse(localStorage.albums).filter(function (x) {
-                     return x.objectId == albumId;
-                 }));
-                 var albumRating = typeof (album[0].rating) === 'undefined' ? rating : Dom.averageOfArray([0].rating);
+        function success() {
+            Noty.success('The album was successfully rated with ' + rating + ' !');
+            closePopup();
+            emptyFields();
+            var albumElement = $('#' + albumId);
+            var changeElement = $(albumElement.first().children().eq(2)[0]).children()[1];
+            Dom.changeRating(albumElement, changeElement, rating, "");
 
-                 var albumRatingSection = $('li#' + albumId + ' footer section.alb-rating-f').text(albumRating + '/10');
-                 console.log(album);
-
-             }, function error(error) {
-                 alert(error);
-             });
+        }, function error(error) {
+            Noty.error("Sorry, there was a problem");
+        });
 }
 
 function ratePicture(event) {
-    var pictureID = $('#popup-rate-picture form').attr('id');
+    var pictureId = $('#popup-rate-picture form').attr('id');
     var rating = document.getElementById("rate-picture-range").value;
 
-    Actions.ratePicture(pictureID, parseInt(rating),
-             function succes() {
-                 alert('The picture was successfully rated with ' + rating + ' !');
-                 closePopup();
-                 showVal(1, 'rate-picture-value');
-             }, function error(error) {
-                 alert(error);
-             });
+    Actions.ratePicture(pictureId, parseInt(rating),
+        function success() {
+            Noty.success('The picture was successfully rated with ' + rating + ' !');
+            var picture = $('#album-images-container').children().map(function(li) {
+                $(li).data('id') == pictureId;
+            }).prevObject[0];
+
+            var changeElement = $('#' + pictureId)[0];
+
+            Dom.changeRating(picture, changeElement, rating, "Rating: ");
+            closePopup();
+        }, function error(error) {
+            Noty.error("Sorry, there was a problem");
+        });
 }
 
 function addCommentToPicture(event) {
@@ -111,7 +126,7 @@ function addCommentToPicture(event) {
         pic = picture;
         Actions.addCommentToPicture(author, comment, picture);
     }).then(function (result) {
-        Queries.getCommentsByPicture(pic).then(function(comments) {
+        Queries.getCommentsByPicture(pic).then(function (comments) {
             Dom.loadPictureComments(comments);
             authorInput.value = "";
             commentInput.value = "";
@@ -127,7 +142,7 @@ function createCategory() {
     var catName = "Cars"; // Get from input field
 
     Actions.createCategory(catName)
-        .then(function (result) {
+        .then(function(result) {
             console.log("Category created.");
         });
 }
@@ -189,8 +204,16 @@ function loadPopup(that) {
 }
 
 function emptyFields() {
-    document.getElementById("name-for-album-comment").value = '';
-    document.getElementById("textareaAlbumComment").value = '';
+    //document.getElementById("name-for-album-comment").value = '';
+    //document.getElementById("textareaAlbumComment").value = '';
+    showVal(1, 'rate-picture-value');
+    showVal(1, 'rate-album-value');
+    document.getElementById('rate-album-range').value = 1;
+    document.getElementById('rate-picture-range').value = 1;
+    document.getElementById("album-name").value = "";
+    document.getElementById("picture-name").value = "";
+    document.getElementById("image-file").value = "";
+
 }
 
 function closePopup() {
@@ -199,10 +222,8 @@ function closePopup() {
     document.getElementById("popup-add-picture").style.display = "none";
     document.getElementById("popup-rate-album").style.display = "none";
     document.getElementById("popup-rate-picture").style.display = "none";
-    showVal(1, 'rate-picture-value');
-    showVal(1, 'rate-album-value');
-    document.getElementById('rate-album-range').value = 1;
-    document.getElementById('rate-picture-range').value = 1;
+    emptyFields();
+
 }
 
 function setSize() {
@@ -264,12 +285,15 @@ function showVal(newVal, id) {
         $(divs[i]).css('height', '100px');
         $(divs[i]).css('background-color', "rgba(0,0,0,0)");
     }
-    $(divs[parseInt(newVal - 1)]).css('background-color', "rgba(0,0,0," + (newVal - 1) / 10 + ")");
-    $(divs[parseInt(newVal - 1)]).css('height', newVal * 10 + "px");
+
+    for (var i = 1; i < newVal; i++) {
+        $(divs[parseInt(i)]).css('background-color', "rgba(0,0,0," + i / 10 + ")");
+        $(divs[parseInt(i)]).css('height', i * 10 + "px");
+    }
 }
 
-$(document).ready(function () {
-    $(window).scroll(function (event) {
+$(document).ready(function() {
+    $(window).scroll(function(event) {
         var scroll = $(window).scrollTop();
         if (scroll > 0) {
             document.getElementById("main-header").classList.add("fixed-header");
@@ -280,37 +304,59 @@ $(document).ready(function () {
             document.getElementById("main").style.marginTop = "80px";
         }
     });
-    $(document).on("click", ".pic-hover", function () {
+    $(document).on("click", ".pic-hover", function() {
         loadPopup($(this));
     });
-    $(document).on("click", ".slider-element", function () {
+    $(document).on("click", ".slider-element", function() {
         loadPopup($(this));
     });
 });
+
+function performSearch() {
+    var keyword = $("#search-bar").val(),
+        albumList = $('#album-list').children(),
+        albumName;
+
+    albumList.show();
+    albumList.each(function(number, element) {
+        albumName = $(element).children('h3.album-title').html().toLowerCase();
+        if (albumName.indexOf(keyword) === -1) {
+            $(element).hide();
+        }
+    });
+}
 
 
 function attachEventes() {
     document.getElementById("add-album-submit").addEventListener("click", createAlbum);
     document.getElementById("add-picture-submit").addEventListener("click", addPictureToAlbum);
     document.getElementById("rate-album-submit").addEventListener("click", rateAlbum);
-
     document.getElementById("rate-picture-submit").addEventListener("click", ratePicture);
     document.getElementById("add-picture-comment-button").addEventListener("click", addCommentToPicture);
 
-    document.getElementById("rate-picture-submit").addEventListener("click", ratePicture);
+    $("#search").submit(function() {
+        performSearch();
+        return false;
+    });
 
-    $('#filters-category').change(function (data) {
+    $("#search-bar").keypress(function() {
+        if (e.which == 13) {
+            performSearch();
+        }
+    });
+
+
+    $('#filters-category').change(function(data) {
         var selected;
         var albumList = $('#album-list').children();
 
-
-        $("#filters-category option:selected").each(function () {
+        $("#filters-category option:selected").each(function() {
             selected = $(this).val();
         });
 
         if (selected !== 'all') {
             albumList.show();
-            albumList.each(function (number, element) {
+            albumList.each(function(number, element) {
                 if ($(element).data('container') !== selected) {
                     $(element).hide();
                 }
@@ -320,36 +366,36 @@ function attachEventes() {
         }
     });
 
-    $('#filters-rating').change(function (data) {
+    $('#filters-rating').change(function(data) {
         var selected;
         var albumList = $('#album-list').children();
 
-        $("#filters-rating option:selected").each(function () {
+        $("#filters-rating option:selected").each(function() {
             selected = $(this).val();
         });
 
         switch (selected) {
             case 'Rating (ascending)':
                 albumList.sort(sortByRatingAsc);
-                albumList.each(function (x, element) {
+                albumList.each(function(x, element) {
                     $('#album-list').append(element);
                 });
                 break;
             case 'Rating (descending)':
                 albumList.sort(sortByRatingDes);
-                albumList.each(function (x, element) {
+                albumList.each(function(x, element) {
                     $('#album-list').append(element);
                 });
                 break;
             case 'Date (ascending)':
                 albumList.sort(sortByDateAsc);
-                albumList.each(function (x, element) {
+                albumList.each(function(x, element) {
                     $('#album-list').append(element);
                 });
                 break;
             case 'Date (descending)':
                 albumList.sort(sortByDateDes);
-                albumList.each(function (x, element) {
+                albumList.each(function(x, element) {
                     $('#album-list').append(element);
                 });
                 break;
@@ -359,36 +405,36 @@ function attachEventes() {
         }
     });
 
-    $('#filters-rating-picture').change(function (data) {
+    $('#filters-rating-picture').change(function(data) {
         var selected;
         var pictureList = $('#album-images-container').children();
 
-        $("#filters-rating-picture option:selected").each(function () {
+        $("#filters-rating-picture option:selected").each(function() {
             selected = $(this).val();
         });
 
         switch (selected) {
             case 'Rating (ascending)':
                 pictureList.sort(sortByRatingAsc);
-                pictureList.each(function (x, element) {
+                pictureList.each(function(x, element) {
                     $('#album-images-container').append(element);
                 });
                 break;
             case 'Rating (descending)':
                 pictureList.sort(sortByRatingDes);
-                pictureList.each(function (x, element) {
+                pictureList.each(function(x, element) {
                     $('#album-images-container').append(element);
                 });
                 break;
             case 'Date (ascending)':
                 pictureList.sort(sortByDateAsc);
-                pictureList.each(function (x, element) {
+                pictureList.each(function(x, element) {
                     $('#album-images-container').append(element);
                 });
                 break;
             case 'Date (descending)':
                 pictureList.sort(sortByDateDes);
-                pictureList.each(function (x, element) {
+                pictureList.each(function(x, element) {
                     $('#album-images-container').append(element);
                 });
                 break;
@@ -401,14 +447,22 @@ function attachEventes() {
 
     });
 
-    $('#image-file').change(function () {
+    $('#image-file').change(function() {
         $('#max-file-size').css('color', 'black');
         $('#allowed-file-types').css('color', 'black');
     });
 
+
+    $('#main-container').on('click', '.album', Dom.openAnAlbum);
+
+
     function sortByRatingAsc(x, y) {
-        var a = typeof ($(x).data('rating')) !== 'undefined' ? $(x).data('rating').reduce(function (pv, cv) { return parseInt(pv) + parseInt(cv); }, 0) / $(x).data('rating').length : -1;
-        var b = typeof ($(y).data('rating')) !== 'undefined' ? $(y).data('rating').reduce(function (pv, cv) { return parseInt(pv) + parseInt(cv); }, 0) / $(y).data('rating').length : -1;
+        var a = typeof($(x).data('rating')) !== 'undefined' ? $(x).data('rating').reduce(function(pv, cv) {
+            return parseInt(pv) + parseInt(cv);
+        }, 0) / $(x).data('rating').length : -1;
+        var b = typeof($(y).data('rating')) !== 'undefined' ? $(y).data('rating').reduce(function(pv, cv) {
+            return parseInt(pv) + parseInt(cv);
+        }, 0) / $(y).data('rating').length : -1;
 
         if (a === b) {
             if ($(x).attr('id') < $(y).attr('id')) {
@@ -421,6 +475,7 @@ function attachEventes() {
 
         return a - b;
     }
+
     function sortByRatingDes(x, y) {
         return sortByRatingAsc(y, x);
     }
@@ -439,12 +494,54 @@ function attachEventes() {
 
 
 
-$(function () {
+function createPictureItem(pic) {
+    var ul = $('#album-images-container');
+
+    var url = pic.file.url;
+    var picName = pic.name;
+    var date = pic.createdAt.substr(0, 10);
+    var dateArr = date.split('-');
+    var picDate = "Date: " + dateArr[2] + '.' + dateArr[1] + '.' +
+
+        dateArr[0];
+    var picId = pic.objectId;
+
+    var header = $('<header>');
+    var h3 = $('<h3>');
+    var section = $('<section>');
+    var footer = $('<footer>');
+    var img = $('<img>');
+    var a = $('<a>');
+
+    h3.text(picName);
+    img.attr('src', url);
+    a.attr('href', url).attr('download', picName).text('Download');
+
+    header.append(h3);
+
+    section.append(img)
+        .append($('<div>')
+            .attr('class', 'pic-hover')
+            .attr('data-id', picId)
+            .attr('data-src', url));
+
+    footer.append($('<section>').attr('class', 'pic-date').text(picDate))
+        .append($('<section>').attr('class', 'pic-download').append(a))
+        .append($('<section>').attr('id', picId));
+
+    var li = $('<li>');
+    li.data('date', pic.createdAt);
+
+    ul.append(li.append(header).append(section).append(footer));
+}
+
+$(function() {
     console.time("start");
     Actions.listAlbums();
     Dom.listCategotes();
-    Dom.openAnAlbum();
     Dom.initSliderElements();
     attachEventes();
+
+
 
 });

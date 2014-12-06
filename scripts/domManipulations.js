@@ -42,161 +42,162 @@
                 .append($('<div>').attr('class', 'icon-album-hover'));
 
             //footer
-            var footerText = typeof (album.rating) == "undefined" ? "Rate me" : averageOfArray(album.rating).toFixed(0);
+            var footerText =
+                typeof (album.rating) == "undefined" ? "Rate me" : averageOfArray(album.rating).toFixed(0) + ' / 10';
 
             footer.append($('<section>').attr('class', 'alb-comments-f').text('Rating'))
-                .append($('<section>').attr('class', 'alb-rating-f').text(footerText + ' / 10'));
+                .append($('<section>').attr('class', 'alb-rating-f').text(footerText));
 
             li.append(h)
                 .append(div)
                 .append(footer);
             mainContainer.append(li);
         });
-        console.timeEnd("start");
-        console.timeEnd("123");
+
     }
 
 
     function openAnAlbum() {
-        $('#main-container').on('click', '.album', function () {
-            var albumContainer = $("#album-opened-container");
-            var div = $('<div>');
-            var h2 = $('<h2>');
-            var li = $('<li>');
-            var ul = $('<ul>');
-            var albumName = this.title;
-            var albumID = this.id;
 
-            $('#filters-category').hide();
-            $('#filters-rating').hide();
-            $('#filters-rating-picture').show();
-            $('#bc').html("<span>Sort: </span>");
+        var albumContainer = $("#album-opened-container");
+        var div = $('<div>');
+        var h2 = $('<h2>');
+        var li = $('<li>');
+        var ul = $('<ul>');
+        var albumName = this.title;
+        var albumID = this.id;
+
+        $('#filters-category').hide();
+        $('#filters-rating').hide();
+        $('#filters-rating-picture').show();
+        $('#bc').html("<span>Sort: </span>");
 
 
-            div.attr('id', 'back-button').attr('onclick', 'collapseAlbum()')
-               .attr('class', 'back-button-change').attr('style', 'display: block;');
+        div.attr('id', 'back-button').attr('onclick', 'collapseAlbum()')
+           .attr('class', 'back-button-change').attr('style', 'display: block;');
 
-            h2.attr('id', 'opened-album-title').attr('class', albumID).text(albumName);
-            ul.attr('id', 'album-images-container');
+        h2.attr('id', 'opened-album-title').attr('class', albumID).text(albumName);
+        ul.attr('id', 'album-images-container');
 
-            var Album = Parse.Object.extend("Album");
-            var album = new Album();
-            album.id = albumID;
+        var Album = Parse.Object.extend("Album");
+        var album = new Album();
+        album.id = albumID;
 
-            Queries.getPicturesByAlbum(album).then(function (picture) {
-                picture.sort(function (x, y) {
-                    var a = typeof (x._serverData.rating) !== 'undefined' ? x._serverData.rating.reduce(function (pv, cv) { return parseInt(pv) + parseInt(cv); }, 0) / x._serverData.rating.length : -1;
-                    var b = typeof (y._serverData.rating) !== 'undefined' ? y._serverData.rating.reduce(function (pv, cv) { return parseInt(pv) + parseInt(cv); }, 0) / y._serverData.rating.length : -1;
+        Queries.getPicturesByAlbum(album).then(function (picture) {
+            picture.sort(function (x, y) {
+                var a = typeof (x._serverData.rating) !== 'undefined' ? x._serverData.rating.reduce(function (pv, cv) { return parseInt(pv) + parseInt(cv); }, 0) / x._serverData.rating.length : -1;
+                var b = typeof (y._serverData.rating) !== 'undefined' ? y._serverData.rating.reduce(function (pv, cv) { return parseInt(pv) + parseInt(cv); }, 0) / y._serverData.rating.length : -1;
 
-                    if (a === b) {
-                        if (x.objectId < y.objectId) {
-                            return -1;
-                        }
-
-                        if (x.objectId > y.objectId) {
-                            return 1;
-                        }
+                if (a === b) {
+                    if (x.objectId < y.objectId) {
+                        return -1;
                     }
 
-                    return a - b;
-                })
+                    if (x.objectId > y.objectId) {
+                        return 1;
+                    }
+                }
 
-                for (var i = 0; i < picture.length; i++) {
-                    var url = picture[i].attributes.file._url;
-                    var picName = picture[i].attributes.name;
-                    var picDate = "Date: " + formatDate(picture[i].createdAt);
-                    var picRating = typeof (picture[i]._serverData.rating) == "undefined" ? "Rate me" :
-                        "Rating: " + averageOfArray(picture[i]._serverData.rating).toFixed(0) + " / 10";
-                    var picId = picture[i].id;
+                return a - b;
+            })
 
-
-
-                    var header = $('<header>');
-                    var h3 = $('<h3>');
-                    var section = $('<section>');
-                    var footer = $('<footer>');
-                    var img = $('<img>');
-                    var a = $('<a>');
-
-
-                    h3.text(picName);
-                    img.attr('src', url);
-                    a.attr('href', url).attr('download', picName).text('Download');
-
-                    header.append(h3);
-
-                    section.append(img)
-                        .append($('<div>')
-                            .attr('class', 'pic-hover')
-                            .attr('data-id', picId)
-                            .attr('data-src', url));
-
-                    footer.append($('<section>').attr('class', 'pic-date').text(picDate))
-                        .append($('<section>').attr('class', 'pic-download').append(a))
-                        .append($('<section>').attr('id', picId).attr('class', 'pic-rating').text(picRating));
-
-
-                    var li = $('<li>');
-                    li.data('rating', picture[i]._serverData.rating);
-                    li.data('date', picture[i].createdAt);
-
-                    ul.append(li.append(header).append(section).append(footer));
-                };
-            });
-
-            var sectionCommentsContainer = $('<section>');
-            sectionCommentsContainer.attr('id', 'popup-album-comment-container');
-
-            var sectionAllComments = $('<section>');
-            sectionAllComments.attr('id', 'album-all-comments');
+            for (var i = 0; i < picture.length; i++) {
+                var url = picture[i].attributes.file._url;
+                var picName = picture[i].attributes.name;
+                var picDate = "Date: " + formatDate(picture[i].createdAt);
+                var picRating = typeof (picture[i]._serverData.rating) == "undefined" ? "Rate me" :
+                    "Rating: " + averageOfArray(picture[i]._serverData.rating).toFixed(0) + " / 10";
+                var picId = picture[i].id;
 
 
 
-            var ulComments = $('<ul>');
+                var header = $('<header>');
+                var h3 = $('<h3>');
+                var section = $('<section>');
+                var footer = $('<footer>');
+                var img = $('<img>');
+                var a = $('<a>');
 
-            var divOnClick = $('<div>');
-            divOnClick.attr('id', 'add-comment-button').attr('class', 'add-buttons').text('Add comment');
-            divOnClick.on("click", addCommentToAlbum);
 
-            var commentsForm = $('<form>');
-            commentsForm.append($('<input>').attr('type', 'text').attr('id', 'name-for-album-comment').attr('placeholder', 'Enter your name'))
-                .append($('<br>')).append($('<textarea>').attr('id', 'textareaAlbumComment').attr('placeholder', 'Enter a comment'))
-                .append(divOnClick);
+                h3.text(picName);
+                img.attr('src', url);
+                a.attr('href', url).attr('download', picName).text('Download');
 
-            var sectionAddAlbumComment = $('<section>');
-            sectionAddAlbumComment.attr('id', 'add-album-comment')
-                .append($('<span>').attr('class', 'small-album-title').text('Add a comment'))
-                .append(commentsForm);
+                header.append(h3);
 
-            var clearDiv = $('<div>');
-            clearDiv.attr('id', 'clearDiv');
+                section.append(img)
+                    .append($('<div>')
+                        .attr('class', 'pic-hover')
+                        .attr('data-id', picId)
+                        .attr('data-src', url));
 
-            Queries.getCommentsByAlbum(album).then(function (album) {
-                for (var i = 0; i < album.length; i++) {
-                    var commentOf = album[i].attributes.commentOf;
-                    var commentContent = album[i].attributes.commentContent;
-                    var commentDate = formatDate(album[i].createdAt);
+                footer.append($('<section>').attr('class', 'pic-date').text(picDate))
+                    .append($('<section>').attr('class', 'pic-download').append(a))
+                    .append($('<section>').attr('id', picId).attr('class', 'pic-rating').text(picRating));
 
-                    var headerComments = $('<header>');
-                    var articleComment = $('<article>');
 
-                    headerComments.append($('<span>').attr('id', 'commentOf').text(commentOf))
-                        .append($('<br>'))
-                        .append($('<span>').attr('id', 'commentDate').text(commentDate));
+                var li = $('<li>');
+                li.data('rating', picture[i]._serverData.rating);
+                li.data('date', picture[i].createdAt);
+                li.data('id', picture[i].id);
 
-                    articleComment.attr('id', 'album-comment-article').text(commentContent);
-
-                    ulComments.append($('<li>').append(headerComments).append(articleComment));
-                };
-                sectionAllComments.append(ulComments);
-                sectionCommentsContainer.append(sectionAllComments).append(sectionAddAlbumComment);
-
-                $('#album-images-container').on('click', '.pic-rating', loadRatePicture);
-
-            });
-
-            albumContainer.append(h2).append(sectionCommentsContainer).append(clearDiv).append(ul);
+                ul.append(li.append(header).append(section).append(footer));
+            };
         });
+
+        var sectionCommentsContainer = $('<section>');
+        sectionCommentsContainer.attr('id', 'popup-album-comment-container');
+
+        var sectionAllComments = $('<section>');
+        sectionAllComments.attr('id', 'album-all-comments');
+
+
+
+        var ulComments = $('<ul>');
+
+        var divOnClick = $('<div>');
+        divOnClick.attr('id', 'add-comment-button').attr('class', 'add-buttons').text('Add comment');
+        divOnClick.on("click", addCommentToAlbum);
+
+        var commentsForm = $('<form>');
+        commentsForm.append($('<input>').attr('type', 'text').attr('id', 'name-for-album-comment').attr('placeholder', 'Enter your name'))
+            .append($('<br>')).append($('<textarea>').attr('id', 'textareaAlbumComment').attr('placeholder', 'Enter a comment'))
+            .append(divOnClick);
+
+        var sectionAddAlbumComment = $('<section>');
+        sectionAddAlbumComment.attr('id', 'add-album-comment')
+            .append($('<span>').attr('class', 'small-album-title').text('Add a comment'))
+            .append(commentsForm);
+
+        var clearDiv = $('<div>');
+        clearDiv.attr('id', 'clearDiv');
+
+        Queries.getCommentsByAlbum(album).then(function (album) {
+            for (var i = 0; i < album.length; i++) {
+                var commentOf = album[i].attributes.commentOf;
+                var commentContent = album[i].attributes.commentContent;
+                var commentDate = formatDate(album[i].createdAt);
+
+                var headerComments = $('<header>');
+                var articleComment = $('<article>');
+
+                headerComments.append($('<span>').attr('id', 'commentOf').text(commentOf))
+                    .append($('<br>'))
+                    .append($('<span>').attr('id', 'commentDate').text(commentDate));
+
+                articleComment.attr('id', 'album-comment-article').text(commentContent);
+
+                ulComments.append($('<li>').append(headerComments).append(articleComment));
+            };
+            sectionAllComments.append(ulComments);
+            sectionCommentsContainer.append(sectionAllComments).append(sectionAddAlbumComment);
+
+            $('#album-images-container').on('click', '.pic-rating', loadRatePicture);
+
+        });
+
+        albumContainer.append(h2).append(sectionCommentsContainer).append(clearDiv).append(ul);
+
     }
 
     function averageOfArray(arr) {
@@ -289,6 +290,26 @@
         return obj.getDate() + '.' + months[obj.getMonth()] +
             '.' + obj.getFullYear();
     }
+    /*
+     * element is element from dom that holds information
+     * changeElement is Dom element inside element
+     */
+    function changeRating(element, changeElement, value, textPrefix) {
+        var ratingArr = $(element).data('rating');
+        var newValue = parseInt(value);
+
+        if (ratingArr === undefined) {
+            var arr = [];
+            arr.push(newValue);
+            $(element).data('rating', arr);
+        } else {
+            ratingArr.push(newValue);
+            $(element).data('rating', ratingArr);
+        }
+
+        var newRating = averageOfArray($(element).data('rating'));
+        $(changeElement).text(textPrefix + newRating.toFixed(0) + ' / 10');
+    }
 
     return {
         listAlbums: listAllAlbums,
@@ -297,6 +318,7 @@
         averageOfArray: averageOfArray,
         initSliderElements: initSliderElements,
         loadPicturePopup: loadPicturePopup,
-        loadPictureComments: loadPictureComments
+        loadPictureComments: loadPictureComments,
+        changeRating: changeRating
     }
 })();
