@@ -26,10 +26,10 @@
             if (album.picture) {
 
 
-                album.picture.forEach(function (x) {
-                    var imgLi = $('<li>').append($('<img>').attr('src', x.file.url));
+                album.picture.forEach(function (pic) {
+                    var imgLi = $('<li>').append($('<img>').attr('src', pic.file.url));
 
-                    //hide picture if album has more than
+                    //hide picture if album has more than 4  
                     if (++displayedPictureCount > 4) {
                         imgLi.hide();
                     }
@@ -197,7 +197,6 @@
         });
 
         albumContainer.append(h2).append(sectionCommentsContainer).append(clearDiv).append(ul);
-
     }
 
     function averageOfArray(arr) {
