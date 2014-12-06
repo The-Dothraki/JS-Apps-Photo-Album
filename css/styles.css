@@ -128,7 +128,7 @@ html, body {
     background: #ffffff;
     width: 260px;
 }
-#search > input[type="submit"] {
+#search > input[type=button] {
     width: 26px;
     height: 26px;
     margin: 0 0 0 -26px;

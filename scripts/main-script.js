@@ -116,15 +116,20 @@ function addCommentToPicture(event) {
     var authorInput = document.getElementById("name-for-pic-comment"),
         commentInput = document.getElementById("comment-value"),
         author = authorInput.value,
-        comment = commentInput.value;
+        comment = commentInput.value,
+        pic;
+
     openedImageId = $("#pic-shown").attr("data-id");
 
     Queries.getObjectById("Picture", openedImageId).then(function (picture) {
+        pic = picture;
         Actions.addCommentToPicture(author, comment, picture);
     }).then(function (result) {
-        // TODO: success message and dynamic refresh
-        authorInput.value = "";
-        commentInput.value = "";
+        Queries.getCommentsByPicture(pic).then(function (comments) {
+            Dom.loadPictureComments(comments);
+            authorInput.value = "";
+            commentInput.value = "";
+        });
     });
 }
 
@@ -191,6 +196,7 @@ function collapseAlbum() {
 }
 
 function loadPopup(that) {
+    $("#pic-comments-list").html("");
     document.getElementById("popup-picture").style.display = "block";
     Dom.loadPicturePopup(that);
     setSize();
@@ -306,6 +312,20 @@ $(document).ready(function () {
     });
 });
 
+function performSearch() {
+    var keyword = $("#search-bar").val(),
+        albumList = $('#album-list').children(),
+        albumName;
+
+    albumList.show();
+    albumList.each(function(number, element) {
+        albumName = $(element).children('h3.album-title').html().toLowerCase();
+        if (albumName.indexOf(keyword) === -1) {
+            $(element).hide();
+        }
+    });
+}
+
 
 function attachEventes() {
     document.getElementById("add-album-submit").addEventListener("click", createAlbum);
@@ -313,15 +333,19 @@ function attachEventes() {
     document.getElementById("rate-album-submit").addEventListener("click", rateAlbum);
     document.getElementById("rate-picture-submit").addEventListener("click", ratePicture);
     document.getElementById("add-picture-comment-button").addEventListener("click", addCommentToPicture);
+    document.getElementById("search-button").addEventListener("click", performSearch);
 
-
+    $("#search").submit(function() {
+        performSearch();
+        return false;
+    });
 
     $('#filters-category').change(function (data) {
         var selected;
         var albumList = $('#album-list').children();
 
 
-        $("#filters-category option:selected").each(function () {
+        $("#filters-category option:selected").each(function() {
             selected = $(this).val();
         });
 
