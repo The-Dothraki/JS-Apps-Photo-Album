@@ -98,11 +98,11 @@ function ratePicture(event) {
     Actions.ratePicture(pictureId, parseInt(rating),
         function success() {
             Noty.success('The picture was successfully rated with ' + rating + ' !');
-            var picture = $('#album-images-container').children().map(function (li) {
-                $(li).data('id') == pictureId;
-            }).prevObject[0];
-
-            var changeElement = $('#' + pictureId)[0];
+            var picture = $('#album-images-container').children().filter(function () {
+                return $(this).data('id') == pictureId;
+            });
+            
+            var changeElement = $('#' + pictureId)[0];           
 
             Dom.changeRating(picture, changeElement, rating, "Rating: ");
             closePopup();
@@ -441,9 +441,6 @@ function attachEventes() {
             default:
                 break;
         }
-
-        console.log(selected);
-
     });
 
     $('#image-file').change(function () {
@@ -528,7 +525,8 @@ function createPictureItem(pic) {
 
     var li = $('<li>');
     li.data('date', pic.createdAt);
-    li.data('id', pic.objectId)
+    li.data('id', pic.objectId);
+    li.data('rating', 'undefined');
 
     ul.append(li.append(header).append(section).append(footer));
     appendPictureToAlbumInAlbumView(url)
