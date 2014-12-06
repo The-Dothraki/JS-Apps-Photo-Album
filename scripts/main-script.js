@@ -203,10 +203,14 @@ function loadPopup(that) {
 }
 
 function emptyFields() {
-    if (!document.getElementById("name-for-album-comment").value) {
+    if (document.getElementById("name-for-album-comment")) {
         document.getElementById("name-for-album-comment").value = '';
     }
-    document.getElementById("textareaAlbumComment").value = '';
+
+    if (document.getElementById("textareaAlbumComment")) {
+        document.getElementById("textareaAlbumComment").value = '';
+    }
+  
     showVal(1, 'rate-picture-value');
     showVal(1, 'rate-album-value');
     document.getElementById('rate-album-range').value = 1;
