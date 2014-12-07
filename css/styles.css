@@ -199,7 +199,7 @@ html, body {
 #breadcrumbs > div > form > select > option {
     height: 30px;
 }
-#add-album-button, #add-picture-button, #rate-album {
+#add-album-button, #add-picture-button, #rate-album, #add-category-button {
     padding: 0 10px;
     height: 32px;
     font-size: 1.5em;
@@ -220,7 +220,7 @@ html, body {
 #add-picture-button, #rate-album {
     display: none;
 }
-#add-album-button:hover, #add-picture-button:hover, #rate-album:hover {
+#add-album-button:hover, #add-picture-button:hover, #rate-album:hover, #add-category-button:hover {
     cursor: pointer;
     opacity: 0.8;
 }
@@ -667,7 +667,7 @@ article#album-comment-article {
     z-index: 20;
     overflow: hidden;
 }
-#popup-picture, #popup-add-album, #popup-add-picture, #popup-rate-album, #popup-rate-picture {
+#popup-picture, #popup-add-album, #popup-add-picture, #popup-rate-album, #popup-rate-picture, #popup-add-category {
     display: none;
 }
 .bodysize-close-popup {

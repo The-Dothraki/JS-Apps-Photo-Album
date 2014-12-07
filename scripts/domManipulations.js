@@ -216,7 +216,9 @@
                 })
             }
         });
-
+    }
+    function clearCategories() {
+        $(".categories-in-dropdown").empty();
     }
 
     function initSliderElements() {
@@ -314,6 +316,7 @@
         listAlbums: listAllAlbums,
         openAnAlbum: openAnAlbum,
         listCategotes: listCategotes,
+        clearCategories: clearCategories,
         averageOfArray: averageOfArray,
         initSliderElements: initSliderElements,
         loadPicturePopup: loadPicturePopup,

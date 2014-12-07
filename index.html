@@ -50,14 +50,12 @@
                     </select>
                 </form>
                 <div id="add-album-button" onclick="loadAddAlbum()" class="add-buttons">Add album</div>
+                <div id="add-category-button" onclick="loadAddCategory()" class="add-buttons">Add category</div>
                 <div id="add-picture-button" onclick="loadAddPicture()" class="add-buttons">Add picture</div>
                 <div id="rate-album" class="add-buttons" onclick="loadRateAlbum()">Rate album</div>
             </div>
         </section>
         <div id="main-container" class="cf">
-            <!-- ------------------------------- -->
-            <!-- ----- ALL ALBUMS ARE HERE ----- -->
-            <!-- ------------------------------- -->
             <h3 class="album-title no-hover">Top 10 pictures</h3>
             <div class="slider-wrapper">
                 <div id="slider" class="slider-carousel">
@@ -68,6 +66,9 @@
                 <div class="slider-prev" onclick="Actions.sliderPrev()"></div>
                 <div class="slider-next" onclick="Actions.sliderNext()"></div>
             </div>
+            <!-- ------------------------------- -->
+            <!-- ----- ALL ALBUMS ARE HERE ----- -->
+            <!-- ------------------------------- -->
             <ul id="album-list">
             </ul>
         </div>
@@ -110,6 +111,17 @@
                 <br>
             </form>
             <div id="add-album-submit" class="add-buttons">Add album</div>
+        </div>
+    </div>
+    <div id="popup-add-category" class="popup">
+        <div class="bodysize-close-popup" onclick="closePopup()"></div>
+        <div class="standard-popup">
+            <h2 class="standard-title">Add category</h2>
+            <form>
+                <label for="album-name">NAME: </label><input type="text" id="category-name">
+                <br>
+            </form>
+            <div id="add-category-submit" class="add-buttons">Add category</div>
         </div>
     </div>
     <div id="popup-add-picture" class="popup">
