@@ -49,6 +49,9 @@
     -webkit-user-select: none;
     -o-user-select: none;
 }
+.empty {
+    min-width: 140px;
+}
 .slider-element div:hover {
     opacity: 0.4;
     cursor: pointer;

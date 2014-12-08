@@ -322,7 +322,8 @@ $(document).ready(function () {
         loadPopup($(this));
     });
     $(document).on("click", ".slider-element", function () {
-        loadPopup($(this));
+        openAlbum();
+        Dom.openAnAlbum.call(this);
     });
 });
 

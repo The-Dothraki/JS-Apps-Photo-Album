@@ -76,30 +76,30 @@ var Actions = (function () {
 
     function listAlbums() {
         Queries.getObjectAndPointer("Album", "Picture", function (result) {
-            Dom.listAlbums(result)
+            Dom.listAlbums(result);
         });
     }
 
-    function sortPicturesByRating(picturesArray) {
+    function sortAlbumsByRating(albumsArray) {
         var fElement;
         var sElement;
-        for (var i = 0; i < picturesArray.length; i++) {
-            if (picturesArray[i].attributes.rating == undefined) {
-                picturesArray.splice(i, 1);
+        for (var i = 0; i < albumsArray.length; i++) {
+            if (albumsArray[i].rating == undefined) {
+                albumsArray.splice(i, 1);
                 i--;
             }
         }
-        for (i = 0; i < picturesArray.length-1; i++) {
-            fElement = getNumAverage(picturesArray[i].attributes.rating);
-            sElement = getNumAverage(picturesArray[i+1].attributes.rating);
+        for (i = 0; i < albumsArray.length-1; i++) {
+            fElement = getNumAverage(albumsArray[i].rating);
+            sElement = getNumAverage(albumsArray[i+1].rating);
             if (sElement > fElement) {
-                var _tempSwap = picturesArray[i];
-                picturesArray[i] = picturesArray[i+1];
-                picturesArray[i+1] = _tempSwap;
+                var _tempSwap = albumsArray[i];
+                albumsArray[i] = albumsArray[i+1];
+                albumsArray[i+1] = _tempSwap;
                 i = -1;
             }
         }
-        return picturesArray;
+        return albumsArray;
     }
 
     function getNumAverage(arr) {
@@ -164,6 +164,11 @@ var Actions = (function () {
         }
     }
 
+    function getLatestPicture(albumId) {
+        var allPictures = Queries.getObjectById("Album", albumId);
+        console.log(allPictures);
+    }
+
     return {
         uploadPicture: uploadPicture,
         addPictureToAlbum: addPictureToAlbum,
@@ -174,8 +179,9 @@ var Actions = (function () {
         ratePicture: ratePicture,
         rateAlbum: rateAlbum,
         listAlbums: listAlbums,
-        sortPicturesByRating: sortPicturesByRating,
+        sortAlbumsByRating: sortAlbumsByRating,
         sliderNext: sliderNext,
-        sliderPrev: sliderPrev
+        sliderPrev: sliderPrev,
+        getLatestPicture: getLatestPicture
     }
 }());
