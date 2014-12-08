@@ -134,7 +134,18 @@ function addCommentToPicture(event) {
 }
 
 function loadHomePage() {
-    window.location.reload();
+    collapseAlbum();
+    document.getElementById("back-button").classList.toggle("back-button-change");
+        
+    changeSelectHTMLTagToDefaultState('#filters-category', 'all');
+    changeSelectHTMLTagToDefaultState('#filters-rating-picture', 'Rating (ascending)');
+    changeSelectHTMLTagToDefaultState('#filters-rating', 'Rating (ascending)');
+}
+
+
+function changeSelectHTMLTagToDefaultState(elementID, defaultOptionValue) {
+    $(elementID).val(defaultOptionValue) // change displaying option
+    $(elementID).trigger('change'); // trigger event
 }
 
 function createCategory() {
