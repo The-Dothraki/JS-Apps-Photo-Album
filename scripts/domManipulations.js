@@ -216,26 +216,40 @@
                 })
             }
         });
-
+    }
+    function clearCategories() {
+        $(".categories-in-dropdown").empty();
     }
 
     function initSliderElements() {
-        Picture = Parse.Object.extend("Picture");
-        var query = new Parse.Query(Picture);
-        query.find({
-            success: function (results) {
-                var sortedPictures = Actions.sortPicturesByRating(results);
-                console.log("HERE IS WHERE IT SHOULD BE ATTACHED TO DOM");
-                sortedPictures.splice(10, sortedPictures.length - 10);
-                sortedPictures.forEach(function (picture) {
-                    var url = picture.attributes.file._url;
-                    var id = picture.id;
+        Queries.getObjectAndPointer("Album", "Picture", function (result) {
+            var sortedAlbums = Actions.sortAlbumsByRating(result);
+            sortedAlbums.splice(10, sortedAlbums.length - 10);
+            sortedAlbums.forEach(function (album) {
+                var picture = album.picture;
+                var id = album.objectId;
+                var name = album.name;
+                console.log(name);
+                if (picture.length > 0) {
+                    var url = picture[picture.length-1].file.url;
                     $("#carousel").append('\n' +
-                        '<li class="slider-element" data-id="' + id + '" data-src="' + url + '"><div><img src="' + url + '" /></div></li>')
-                });
-                console.log(sortedPictures);
-            }
-        })
+                        '<li class="slider-element" id ="' + id
+                        + '" data-id="' + id
+                        + '" data-src="' + url
+                        + '" alt = "' + name + '"><div>' +
+                        '<img src="' + url + '" /></div></li>')
+
+                }
+                else {
+                    $("#carousel").append('\n' +
+                        '<li class="slider-element empty" id ="' + id
+                        + '" data-id="' + id
+                        + '" alt = "' + name
+                        + '"><div>' +
+                        '<img src="images/no-image-default.png" /></div></li>')
+                }
+            });
+        });
     }
 
     function loadPicturePopup(pic) {
@@ -314,6 +328,7 @@
         listAlbums: listAllAlbums,
         openAnAlbum: openAnAlbum,
         listCategotes: listCategotes,
+        clearCategories: clearCategories,
         averageOfArray: averageOfArray,
         initSliderElements: initSliderElements,
         loadPicturePopup: loadPicturePopup,

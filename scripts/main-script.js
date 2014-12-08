@@ -138,12 +138,15 @@ function loadHomePage() {
 }
 
 function createCategory() {
-    var catName = "Cars"; // Get from input field
-
+    var catName = document.getElementById('category-name').value; // Get from input field
     Actions.createCategory(catName)
         .then(function (result) {
             console.log("Category created.");
         });
+    Dom.clearCategories();
+    Dom.listCategotes();
+    closePopup();
+    Noty.success("Category created");
 }
 
 function getSelectedTextFromSelect(elementId) {
@@ -175,6 +178,7 @@ function openAlbum() {
     document.getElementById("add-album-button").style.display = "none";
     document.getElementById("add-picture-button").style.display = "block";
     document.getElementById("rate-album").style.display = "block";
+    document.getElementById("add-category-button").style.display = "none";
 }
 
 function collapseAlbum() {
@@ -185,6 +189,7 @@ function collapseAlbum() {
     document.getElementById("add-album-button").style.display = "block";
     document.getElementById("add-picture-button").style.display = "none";
     document.getElementById("rate-album").style.display = "none";
+    document.getElementById("add-category-button").style.display = "block";
     $('#album-opened-container ul').remove();
     $('#album-opened-container h2').remove();
     $('#popup-album-comment-container').remove();
@@ -218,16 +223,17 @@ function emptyFields() {
     document.getElementById("album-name").value = "";
     document.getElementById("picture-name").value = "";
     document.getElementById("image-file").value = "";
+    document.getElementById("category-name").value = "";
 }
 
 function closePopup() {
     document.getElementById("popup-picture").style.display = "none";
     document.getElementById("popup-add-album").style.display = "none";
+    document.getElementById("popup-add-category").style.display = "none";
     document.getElementById("popup-add-picture").style.display = "none";
     document.getElementById("popup-rate-album").style.display = "none";
     document.getElementById("popup-rate-picture").style.display = "none";
     emptyFields();
-
 }
 
 function setSize() {
@@ -260,6 +266,10 @@ function setSize() {
 
 function loadAddAlbum() {
     document.getElementById("popup-add-album").style.display = "block";
+}
+
+function loadAddCategory() {
+    document.getElementById("popup-add-category").style.display = "block";
 }
 
 function loadAddPicture() {
@@ -312,7 +322,8 @@ $(document).ready(function () {
         loadPopup($(this));
     });
     $(document).on("click", ".slider-element", function () {
-        loadPopup($(this));
+        openAlbum();
+        Dom.openAnAlbum.call(this);
     });
 });
 
@@ -333,6 +344,7 @@ function performSearch() {
 
 function attachEventes() {
     document.getElementById("add-album-submit").addEventListener("click", createAlbum);
+    document.getElementById("add-category-submit").addEventListener("click", createCategory);
     document.getElementById("add-picture-submit").addEventListener("click", addPictureToAlbum);
     document.getElementById("rate-album-submit").addEventListener("click", rateAlbum);
     document.getElementById("rate-picture-submit").addEventListener("click", ratePicture);
