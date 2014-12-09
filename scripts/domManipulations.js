@@ -277,19 +277,19 @@
             i;
 
         ul.html("");
-
-        for (i in comments) {
-            author = comments[i].attributes.author;
-            content = comments[i].attributes.commentContent;
-            date = formatDate(comments[i].createdAt);
+        
+        comments.forEach(function(comment) {
+            author = comment.attributes.author;
+            content = comment.attributes.commentContent;
+            date = formatDate(comment.createdAt);
             li = $("<li>");
             header = $("<header>")
                 .append($("<span>").text(author))
                 .append($("<span>").text(date));
             li.append(header)
-                .append($("<article>").append(content));
+                .append($("<article>").text(content));
             ul.append(li);
-        }
+        });
     }
 
     function formatDate(obj) {

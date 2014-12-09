@@ -153,7 +153,7 @@ var Queries = (function () {
         query = new Parse.Query(PictureComment);
         query.equalTo("picture", picture);
 
-        return query.find();
+        return query.ascending("createdAt").find();
     }
 
     return {

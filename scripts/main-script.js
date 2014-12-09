@@ -112,24 +112,31 @@ function ratePicture(event) {
 
 function addCommentToPicture(event) {
 
-    var authorInput = document.getElementById("name-for-pic-comment"),
-        commentInput = document.getElementById("comment-value"),
-        author = authorInput.value,
-        comment = commentInput.value,
+    var authorInput = $("#name-for-pic-comment"),
+        commentInput = $("#comment-value"),
+        author = validateString(authorInput.val(), "Author"),
+        comment = commentInput.val(),
         pic;
 
-    openedImageId = $("#pic-shown").attr("data-id");
+    if (!comment || comment.length > 100) {
+        Noty.error("Comment cannot be larger than 100 characters.")
+        return;
+    } else if (!author) {
 
-    Queries.getObjectById("Picture", openedImageId).then(function (picture) {
-        pic = picture;
-        Actions.addCommentToPicture(author, comment, picture);
-    }).then(function (result) {
-        Queries.getCommentsByPicture(pic).then(function (comments) {
-            Dom.loadPictureComments(comments);
-            authorInput.value = "";
-            commentInput.value = "";
+    } else {
+        openedImageId = $("#pic-shown").attr("data-id");
+
+        Queries.getObjectById("Picture", openedImageId).then(function (picture) {
+            pic = picture;
+            Actions.addCommentToPicture(author, comment, picture);
+        }).then(function (result) {
+            Queries.getCommentsByPicture(pic).then(function (comments) {
+                Dom.loadPictureComments(comments);
+                authorInput.val("");
+                commentInput.val("");
+            });
         });
-    });
+    }
 }
 
 function loadHomePage() {
@@ -148,12 +155,14 @@ function changeSelectHTMLTagToDefaultState(elementID, defaultOptionValue) {
 }
 
 function createCategory() {
-    var catName = $('#category-name').val(); // Get from input field
-    Actions.createCategory(catName);
-    Dom.clearCategories();
-    Dom.listCategotes();
-    closePopup();
-    Noty.success("Category created");
+    var catName = validateString($('#category-name').val(), "Category name"); // Get from input field
+    if (catName) {
+        Noty.success("Category created");
+        Actions.createCategory(catName);
+        Dom.clearCategories();
+        Dom.listCategotes();
+        closePopup();
+    }
 }
 
 function getSelectedTextFromSelect(elementId) {
@@ -170,7 +179,7 @@ function validateString(value, varName) {
     var regexValidate = new RegExp("(^[A-Za-z0-9]+[A-Za-z0-9 ][A-Za-z0-9 ]*$)");
 
     if (!trimmed || trimmed.length > 25 || !regexValidate.test(trimmed)) {
-        throw new Error(varName + " should be between 0 and 25 symbols and should contain only latin letters, numbers, intervals and dashes.");
+        Noty.error(varName + " should be between 0 and 25 symbols and should contain only latin letters, numbers, intervals and dashes.");
     } else {
         return trimmed;
     }

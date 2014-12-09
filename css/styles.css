@@ -524,7 +524,6 @@ textarea#textareaAlbumComment:focus {
 
 article#album-comment-article {
     font-size: 1.4em;
-    text-align: justify;
 }
 
 
@@ -753,6 +752,7 @@ article#album-comment-article {
     font-size: 1.4em;
     color: #777;
     padding: 0 5px;
+    white-space: pre;
 }
 #add-comment {
     height: 230px;
@@ -891,7 +891,7 @@ input[type="text"], #popup-add-album select {
     margin: auto;
     height: 100px;
     background-color: rgba(0,0,0,0);
-    display: inline-block;pic-download
+    display: inline-block;
 }
 
 /*Input Range Style*/
