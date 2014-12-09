@@ -30,18 +30,17 @@ function addCommentToAlbum(event) {
 
     var openedAlbum = $('#opened-album-title');
     var albumId = openedAlbum.attr('class');
+    var validName = validateString(commentOf, 'Name');
 
-    try {
-        var validName = validateString(commentOf, 'Name');
-
+    if (validName && commentContent) {
         Queries.getObjectById("Album", albumId).then(function (album) {
             Actions.addCommentToAlbum(validName, commentContent, album);
         }).then(function (result) {
             emptyFields();
             Noty.success('The comment was successfully added."');
         });
-    } catch (error) {
-        Noty.error(error);
+    } else if (!commentContent) {
+        Noty.error("Comment cannot be empty.");
     }
 }
 

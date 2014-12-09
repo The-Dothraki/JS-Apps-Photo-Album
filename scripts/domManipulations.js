@@ -277,7 +277,7 @@
             i;
 
         ul.html("");
-        
+
         comments.forEach(function(comment) {
             author = comment.attributes.author;
             content = comment.attributes.commentContent;
