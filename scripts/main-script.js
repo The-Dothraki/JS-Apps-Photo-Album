@@ -13,14 +13,13 @@ function addPictureToAlbum(event) {
                 Actions.addPictureToAlbum(validPicName, picFile, album)
                     .then(function () {
                         Queries.getLastSaveObject('Picture', function (pic) {
-                            console.log(pic[0]);
                             createPictureItem(pic[0]);
                         });
                     });
                 closePopup();
             });
     } catch (error) {
-        // maybe log the error..
+        Noty.error(error);
     }
 }
 
@@ -41,7 +40,7 @@ function addCommentToAlbum(event) {
             alert('The comment was successfully added."');
         });
     } catch (error) {
-        alert(error.message);
+        Noty.error(error);
     }
 }
 
@@ -572,7 +571,6 @@ function appendPictureToAlbumInAlbumView(picUrl) {
 }
 
 $(function () {
-    console.time("start");
     Actions.listAlbums();
     Dom.listCategotes();
     Dom.initSliderElements();
