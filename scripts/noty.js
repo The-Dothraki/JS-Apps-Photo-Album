@@ -22,6 +22,6 @@
 
     return {
         success: success,
-        error: error,
+        error: error
     }
 })();

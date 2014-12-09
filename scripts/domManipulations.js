@@ -2,7 +2,6 @@
     var mainContainer = $("#album-list");
 
     function listAllAlbums(albums) {
-        console.time("123");
         albums.forEach(function (album, i) {
             var li = $('<li>');
             var div = $('<div>');
@@ -229,7 +228,6 @@
                 var picture = album.picture;
                 var id = album.objectId;
                 var name = album.name;
-                console.log(name);
                 if (picture.length > 0) {
                     var url = picture[picture.length-1].file.url;
                     $("#carousel").append('\n' +

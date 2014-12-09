@@ -1,8 +1,8 @@
 function addPictureToAlbum(event) {
-    var picName = document.getElementById('picture-name').value;
+    var picName = $('#picture-name').val();
 
-    var openedAlbum = document.getElementById('opened-album-title');
-    var albumId = openedAlbum.getAttribute('class');
+    var openedAlbum = $('#opened-album-title');
+    var albumId = openedAlbum.attr('class');
 
     try {
         var validPicName = validateString(picName, 'Picture name');
@@ -17,6 +17,7 @@ function addPictureToAlbum(event) {
                         });
                     });
                 closePopup();
+                Noty.success("The picture was successfully added.");
             });
     } catch (error) {
         Noty.error(error);
@@ -24,11 +25,11 @@ function addPictureToAlbum(event) {
 }
 
 function addCommentToAlbum(event) {
-    var commentContent = document.getElementById("textareaAlbumComment").value;
-    var commentOf = document.getElementById("name-for-album-comment").value.trim();
+    var commentContent = $("#textareaAlbumComment").val();
+    var commentOf = $("#name-for-album-comment").val().trim();
 
-    var openedAlbum = document.getElementById('opened-album-title');
-    var albumId = openedAlbum.getAttribute('class');
+    var openedAlbum = $('#opened-album-title');
+    var albumId = openedAlbum.attr('class');
 
     try {
         var validName = validateString(commentOf, 'Name');
@@ -37,7 +38,7 @@ function addCommentToAlbum(event) {
             Actions.addCommentToAlbum(validName, commentContent, album);
         }).then(function (result) {
             emptyFields();
-            alert('The comment was successfully added."');
+            Noty.success('The comment was successfully added."');
         });
     } catch (error) {
         Noty.error(error);
@@ -45,14 +46,13 @@ function addCommentToAlbum(event) {
 }
 
 function createAlbum(event) {
-    var albumName = document.getElementById("album-name").value.trim(),
+    var albumName = $("#album-name").val().trim(),
         a = document.getElementById("album-category"),
         categoryId = a.options[a.selectedIndex].value,
         regexValidate = new RegExp("(^[A-Za-z0-9]+[A-Za-z0-9 ][A-Za-z0-9 ]*$)");
-    document.getElementById("album-name").value = albumName;
-    console.log(albumName);
+    $("#album-name").val(albumName);
     if (!albumName || albumName.length > 25 || !regexValidate.test(albumName)) {
-        alert("Album name should be between 0 and 25 symbols and should contain only latin letters, numbers, intervals and dashes.");
+        Noty.error("Album name should be between 0 and 25 symbols and should contain only latin letters, numbers, intervals and dashes.");
     } else {
         Queries.getObjectById("Category", categoryId)
             .then(function (category) {
@@ -73,9 +73,9 @@ function createAlbum(event) {
 }
 
 function rateAlbum() {
-    var openedAlbum = document.getElementById('opened-album-title');
-    var albumId = openedAlbum.getAttribute('class');
-    var rating = document.getElementById("rate-album-range").value;
+    var openedAlbum = $('#opened-album-title');
+    var albumId = openedAlbum.attr("class");
+    var rating = $("#rate-album-range").val();
     Actions.rateAlbum(albumId, parseInt(rating),
         function success() {
             Noty.success('The album was successfully rated with ' + rating + ' !');
@@ -92,7 +92,7 @@ function rateAlbum() {
 
 function ratePicture(event) {
     var pictureId = $('#popup-rate-picture form').attr('id');
-    var rating = document.getElementById("rate-picture-range").value;
+    var rating = $("#rate-picture-range").val();
 
     Actions.ratePicture(pictureId, parseInt(rating),
         function success() {
@@ -134,7 +134,7 @@ function addCommentToPicture(event) {
 
 function loadHomePage() {
     collapseAlbum();
-    document.getElementById("back-button").classList.toggle("back-button-change");
+    $("#back-button").toggleClass("back-button-change");
         
     changeSelectHTMLTagToDefaultState('#filters-category', 'all');
     changeSelectHTMLTagToDefaultState('#filters-rating-picture', 'Rating (ascending)');
@@ -148,11 +148,8 @@ function changeSelectHTMLTagToDefaultState(elementID, defaultOptionValue) {
 }
 
 function createCategory() {
-    var catName = document.getElementById('category-name').value; // Get from input field
-    Actions.createCategory(catName)
-        .then(function (result) {
-            console.log("Category created.");
-        });
+    var catName = $('#category-name').val(); // Get from input field
+    Actions.createCategory(catName);
     Dom.clearCategories();
     Dom.listCategotes();
     closePopup();
@@ -181,25 +178,25 @@ function validateString(value, varName) {
 
 // FRONT END SCRIPTS
 function openAlbum() {
-    document.getElementById("back-button").classList.toggle("back-button-change");
-    document.getElementById("back-button").style.display = "block";
-    document.getElementById("album-opened-container").style.display = "block";
-    document.getElementById("main-container").classList.add("main-collapse");
-    document.getElementById("add-album-button").style.display = "none";
-    document.getElementById("add-picture-button").style.display = "block";
-    document.getElementById("rate-album").style.display = "block";
-    document.getElementById("add-category-button").style.display = "none";
+    $("#back-button").toggleClass("back-button-change");
+    $("#back-button").css("display", "block");
+    $("#album-opened-container").css("display", "block");
+    $("#main-container").addClass("main-collapse");
+    $("#add-album-button").css("display", "none");
+    $("#add-picture-button").css("display", "block");
+    $("#rate-album").css("display", "block");
+    $("#add-category-button").css("display", "none");
 }
 
 function collapseAlbum() {
-    document.getElementById("back-button").classList.toggle("back-button-change");
-    document.getElementById("back-button").style.display = "none";
-    document.getElementById("main-container").classList.remove("main-collapse");
-    document.getElementById("album-opened-container").style.display = "none";
-    document.getElementById("add-album-button").style.display = "block";
-    document.getElementById("add-picture-button").style.display = "none";
-    document.getElementById("rate-album").style.display = "none";
-    document.getElementById("add-category-button").style.display = "block";
+    $("#back-button").toggleClass("back-button-change");
+    $("#back-button").css("display", "none");
+    $("#main-container").removeClass("main-collapse");
+    $("#album-opened-container").css("display", "none");
+    $("#add-album-button").css("display", "block");
+    $("#add-picture-button").css("display", "none");
+    $("#rate-album").css("display", "none");
+    $("#add-category-button").css("display", "block");
     $('#album-opened-container ul').remove();
     $('#album-opened-container h2').remove();
     $('#popup-album-comment-container').remove();
@@ -212,37 +209,37 @@ function collapseAlbum() {
 
 function loadPopup(that) {
     $("#pic-comments-list").html("");
-    document.getElementById("popup-picture").style.display = "block";
+    $("#popup-picture").css("display", "block");
     Dom.loadPicturePopup(that);
     setSize();
 }
 
 function emptyFields() {
-    if (document.getElementById("name-for-album-comment")) {
-        document.getElementById("name-for-album-comment").value = '';
+    if ($("#name-for-album-comment")) {
+        $("#name-for-album-comment").val('');
     }
 
-    if (document.getElementById("textareaAlbumComment")) {
-        document.getElementById("textareaAlbumComment").value = '';
+    if ($("#textareaAlbumComment")) {
+        $("#textareaAlbumComment").val('');
     }
   
     showVal(1, 'rate-picture-value');
     showVal(1, 'rate-album-value');
-    document.getElementById('rate-album-range').value = 1;
-    document.getElementById('rate-picture-range').value = 1;
-    document.getElementById("album-name").value = "";
-    document.getElementById("picture-name").value = "";
-    document.getElementById("image-file").value = "";
-    document.getElementById("category-name").value = "";
+    $('#rate-album-range').val(1);
+    $('#rate-picture-range').val(1);
+    $("#album-name").val("");
+    $("#picture-name").val("");
+    $("#image-file").val("");
+    $("#category-name").val("");
 }
 
 function closePopup() {
-    document.getElementById("popup-picture").style.display = "none";
-    document.getElementById("popup-add-album").style.display = "none";
-    document.getElementById("popup-add-category").style.display = "none";
-    document.getElementById("popup-add-picture").style.display = "none";
-    document.getElementById("popup-rate-album").style.display = "none";
-    document.getElementById("popup-rate-picture").style.display = "none";
+    $("#popup-picture").css("display", "none");
+    $("#popup-add-album").css("display", "none");
+    $("#popup-add-category").css("display", "none");
+    $("#popup-add-picture").css("display", "none");
+    $("#popup-rate-album").css("display", "none");
+    $("#popup-rate-picture").css("display", "none");
     emptyFields();
 }
 
@@ -250,48 +247,48 @@ function setSize() {
     var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
     var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
-    var img = document.getElementById("pic-shown");
-    var pictureWidth = (img.clientWidth);
-    var pictureHeight = (img.clientHeight);
+    var img = $("#pic-shown");
+    var pictureWidth = (img.width());
+    var pictureHeight = (img.height());
 
     var widthContainer = viewportWidth - 200;
     var heightContainer = viewportHeight - 100;
-    document.getElementById("popup-picture-container").style.width = widthContainer.toString() + 'px';
-    document.getElementById("popup-picture-container").style.height = heightContainer.toString() + 'px';
+    $("#popup-picture-container").css("width", (widthContainer.toString() + 'px'));
+    $("#popup-picture-container").css("height", (heightContainer.toString() + 'px'));
 
     var aspectRatio = (pictureWidth) / (pictureHeight);
 
-    document.getElementById("pic-all-comments").style.height = (heightContainer - 260).toString() + 'px';
-    document.getElementById("popup-picture-image-container").style.width = (widthContainer - 380).toString() + 'px';
-    document.getElementById("popup-picture-image-container").style.height = heightContainer.toString() + 'px';
+    $("#pic-all-comments").css("height", ((heightContainer - 260).toString() + 'px'));
+    $("#popup-picture-image-container").css("width", ((widthContainer - 380).toString() + 'px'));
+    $("#popup-picture-image-container").css("height", (heightContainer.toString() + 'px'));
     //if horizontal
     if ((widthContainer - 380) / heightContainer > aspectRatio) {
-        document.getElementById("pic-shown").style.maxHeight = '100%';
-        document.getElementById("pic-shown").style.maxWidth = 'auto';
+        img.css("max-height", "100%");
+        img.css("max-width", "auto");
     } else {
-        document.getElementById("pic-shown").style.maxWidth = '100%';
-        document.getElementById("pic-shown").style.maxHeight = 'auto';
+        img.css("max-width", "100%");
+        img.css("max-height", "auto");
     }
 }
 
 function loadAddAlbum() {
-    document.getElementById("popup-add-album").style.display = "block";
+    $("#popup-add-album").css("display", "block");
 }
 
 function loadAddCategory() {
-    document.getElementById("popup-add-category").style.display = "block";
+    $("#popup-add-category").css("display", "block");
 }
 
 function loadAddPicture() {
-    document.getElementById("popup-add-picture").style.display = "block";
+    $("#popup-add-picture").css("display", "block");
 }
 
 function loadRateAlbum() {
-    document.getElementById("popup-rate-album").style.display = "block";
+    $("#popup-rate-album").css("display", "block");
 }
 
 function loadRatePicture() {
-    document.getElementById("popup-rate-picture").style.display = "block";
+    $("#popup-rate-picture").css("display", "block");
     $('#popup-rate-picture form').attr('id', this.id);
 }
 
@@ -320,12 +317,12 @@ $(document).ready(function () {
     $(window).scroll(function (event) {
         var scroll = $(window).scrollTop();
         if (scroll > 0) {
-            document.getElementById("main-header").classList.add("fixed-header");
-            document.getElementById("main").style.marginTop = "50px";
+            $("#main-header").addClass("fixed-header");
+            $("#main").css("margin-top", "50px");
         }
         if (scroll == 0) {
-            document.getElementById("main-header").classList.remove("fixed-header");
-            document.getElementById("main").style.marginTop = "80px";
+            $("#main-header").removeClass("fixed-header");
+            $("#main").css("margin-top", "80px");
         }
     });
     $(document).on("click", ".pic-hover", function () {
@@ -353,13 +350,13 @@ function performSearch() {
 
 
 function attachEventes() {
-    document.getElementById("add-album-submit").addEventListener("click", createAlbum);
-    document.getElementById("add-category-submit").addEventListener("click", createCategory);
-    document.getElementById("add-picture-submit").addEventListener("click", addPictureToAlbum);
-    document.getElementById("rate-album-submit").addEventListener("click", rateAlbum);
-    document.getElementById("rate-picture-submit").addEventListener("click", ratePicture);
-    document.getElementById("add-picture-comment-button").addEventListener("click", addCommentToPicture);
-    document.getElementById("search-button").addEventListener("click", performSearch);
+    $("#add-album-submit").on("click", createAlbum);
+    $("#add-category-submit").on("click", createCategory);
+    $("#add-picture-submit").on("click", addPictureToAlbum);
+    $("#rate-album-submit").on("click", rateAlbum);
+    $("#rate-picture-submit").on("click", ratePicture);
+    $("#add-picture-comment-button").on("click", addCommentToPicture);
+    $("#search-button").on("click", performSearch);
 
     $("#search").submit(function() {
         performSearch();
@@ -555,8 +552,8 @@ function createPictureItem(pic) {
 }
 
 function appendPictureToAlbumInAlbumView(picUrl) {
-    var openedAlbum = document.getElementById('opened-album-title');
-    var albumId = openedAlbum.getAttribute('class');
+    var openedAlbum = $('#opened-album-title');
+    var albumId = openedAlbum.attr('class');
     var pictureLiInAlbumView = $('#' + albumId + " div.album-pic-holder ul li");
 
     if (pictureLiInAlbumView.length < 4) {

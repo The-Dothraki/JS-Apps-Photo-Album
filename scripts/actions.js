@@ -117,7 +117,7 @@ var Actions = (function () {
         else if (sliderMargin >= 750 && sliderMargin < 900) {
             sliderMargin = 900;
         }
-        document.getElementById('carousel').style.marginLeft = "-"+sliderMargin+"px";
+        $('#carousel').css("margin-left", "-"+sliderMargin+"px");
     }
 
     function sliderPrev() {
@@ -127,7 +127,7 @@ var Actions = (function () {
         else if (sliderMargin >= 0 && sliderMargin < 150) {
             sliderMargin = 0;
         }
-        document.getElementById('carousel').style.marginLeft = "-"+sliderMargin+"px";
+        $('#carousel').css("margin-left", "-"+sliderMargin+"px");
     }
 
     function getFileExtension (fileName) {
@@ -166,7 +166,6 @@ var Actions = (function () {
 
     function getLatestPicture(albumId) {
         var allPictures = Queries.getObjectById("Album", albumId);
-        console.log(allPictures);
     }
 
     return {

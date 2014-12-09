@@ -71,7 +71,6 @@ var Queries = (function () {
         queryAlbum.find({
             success: function (albumsResult) {
                 var albums = {};
-                console.time("q");
                 albumsResult.forEach(function (x) {
                     var temp = x.toJSON();
                     temp['picture'] = [];
@@ -104,7 +103,6 @@ var Queries = (function () {
                             return a - b;
                         });
                         callback(arr);
-                        console.timeEnd("q");
                     }
                 });
             }
@@ -127,8 +125,6 @@ var Queries = (function () {
                 success(tableName);
             },
             error: function (tableName, error) {
-                console.log(error);
-
                 // The save failed.
                 // error is a Parse.Error with an error code and description.
             }
